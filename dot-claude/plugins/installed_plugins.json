@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "plugins": {
+    "hookify@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\User\\.claude\\plugins\\cache\\claude-plugins-official\\hookify\\113b335d11ae",
+        "version": "113b335d11ae",
+        "installedAt": "2026-01-08T02:09:23.883Z",
+        "lastUpdated": "2026-01-08T03:37:07.077Z",
+        "gitCommitSha": "113b335d11aee7f33e81a9d9139649c5be657329"
+      }
+    ],
+    "feature-dev@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\User\\.claude\\plugins\\cache\\claude-plugins-official\\feature-dev\\113b335d11ae",
+        "version": "113b335d11ae",
+        "installedAt": "2026-01-08T02:09:23.883Z",
+        "lastUpdated": "2026-01-08T03:37:07.077Z",
+        "gitCommitSha": "113b335d11aee7f33e81a9d9139649c5be657329"
+      }
+    ],
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "C:\\Users\\User\\.claude\\plugins\\cache\\claude-plugins-official\\frontend-design\\113b335d11ae",
+        "version": "113b335d11ae",
+        "installedAt": "2026-01-08T02:09:23.883Z",
+        "lastUpdated": "2026-01-08T03:37:07.077Z",
+        "gitCommitSha": "113b335d11aee7f33e81a9d9139649c5be657329"
+      }
+    ]
+  }
+}
