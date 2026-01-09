@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 페어프로그래밍 - 통합본</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0A0A0F;
+            color: #F0F0F5;
+            overflow: hidden;
+        }
+
+        .slides { display: flex; }
+
+        .slide {
+            min-width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            background: #0A0A0F;
+        }
+
+        .slide.light { background: #F5F6FA; color: #0A0A0F; }
+        .slide.surface { background: #0F1015; }
+        .slide.blue { background: linear-gradient(135deg, #0D1B3E 0%, #1428A0 100%); }
+        .slide.mint { background: linear-gradient(135deg, #064E3B 0%, #10B981 100%); }
+        .slide.orange { background: linear-gradient(135deg, #7C2D12 0%, #EA580C 100%); }
+        .slide.violet { background: linear-gradient(135deg, #3B0764 0%, #7C3AED 100%); }
+        .slide.google { background: linear-gradient(135deg, #1a1a2e 0%, #4285F4 100%); }
+
+        .slide.mint .sub, .slide.orange .sub, .slide.violet .sub, .slide.blue .sub, .slide.google .sub {
+            color: rgba(255,255,255,0.75);
+        }
+        .slide.light .sub { color: #5A6070; }
+
+        .slide.mint .em { color: #6EE7B7; }
+        .slide.orange .em { color: #FED7AA; }
+        .slide.violet .em { color: #C4B5FD; }
+        .slide.blue .em { color: #8AB8FF; }
+        .slide.google .em { color: #8AB8FF; }
+        .slide.light .em { color: #1428A0; }
+
+        h1 {
+            font-size: clamp(3.2rem, 8vw, 6rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(2.2rem, 5.5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 36px;
+            letter-spacing: -0.01em;
+        }
+
+        .sub {
+            font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+            color: #8890A0;
+            margin-top: 28px;
+            text-align: center;
+            line-height: 1.85;
+            font-weight: 300;
+        }
+
+        .em { color: #4A8CFF; }
+        .red { color: #F87171; }
+        .green { color: #10B981; }
+        .yellow { color: #FBBF24; }
+
+        .meta {
+            margin-top: 60px;
+            font-size: 0.95rem;
+            color: #4A5060;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        blockquote {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 300;
+            max-width: 850px;
+            text-align: center;
+            line-height: 1.7;
+            color: #F0F0F5;
+        }
+
+        cite {
+            display: block;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            font-style: normal;
+            letter-spacing: 0.05em;
+        }
+
+        .big {
+            font-size: clamp(8rem, 25vw, 16rem);
+            font-weight: 900;
+            color: #4A8CFF;
+            line-height: 1;
+            opacity: 0.25;
+        }
+
+        /* Tool Card */
+        .tool-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .tool-card {
+            background: #12141A;
+            border: 1px solid #252830;
+            padding: 36px 40px;
+            min-width: 280px;
+            max-width: 330px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .tool-card.recommended {
+            border-color: #10B981;
+            background: linear-gradient(180deg, #0F1015 0%, #064E3B20 100%);
+        }
+
+        .tool-card.hot {
+            border-color: #F59E0B;
+            background: linear-gradient(180deg, #0F1015 0%, #78350F20 100%);
+        }
+
+        .tool-card .name {
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .tool-card .desc {
+            font-size: 1.05rem;
+            color: #8890A0;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .tool-card .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            background: #252830;
+            color: #8890A0;
+            border-radius: 4px;
+            margin: 3px;
+        }
+
+        .tool-card .tag.green { background: #064E3B; color: #6EE7B7; }
+        .tool-card .tag.blue { background: #1E3A5F; color: #8AB8FF; }
+        .tool-card .tag.yellow { background: #713F12; color: #FCD34D; }
+
+        /* Comparison */
+        .comp {
+            display: flex;
+            gap: 24px;
+            margin: 48px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .comp-item {
+            padding: 44px 52px;
+            text-align: center;
+            background: #12141A;
+            min-width: 220px;
+            border: 1px solid #252830;
+        }
+
+        .slide.light .comp-item { background: #EAECF2; border-color: #D0D4E0; }
+        .comp-item.on { background: #1428A0; border-color: #4A8CFF; }
+        .slide.light .comp-item.on { background: #1428A0; border-color: #1428A0; color: #F0F0F5; }
+
+        .comp-item .tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+            color: #5A6070;
+        }
+
+        .comp-item.on .tag { color: #8AB8FF; }
+        .comp-item p { font-size: 1.25rem; font-weight: 700; }
+
+        /* List */
+        .list {
+            list-style: none;
+            max-width: 780px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .list li {
+            font-size: 1.25rem;
+            padding: 22px 0;
+            border-bottom: 1px solid #252830;
+            color: #A0A8B8;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .slide.light .list li { border-color: #D0D4E0; color: #5A6070; }
+        .list li:last-child { border-bottom: none; }
+        .list strong { color: #F0F0F5; font-weight: 700; }
+        .slide.light .list strong { color: #0A0A0F; }
+
+        /* Code Block */
+        .code {
+            background: #12141A;
+            border: 1px solid #252830;
+            padding: 32px 36px;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            max-width: 880px;
+            width: 92%;
+            margin: 28px 0;
+            white-space: pre-wrap;
+            color: #A0A8B8;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        .code .comment { color: #5A6070; }
+        .code .keyword { color: #C4B5FD; }
+        .code .string { color: #6EE7B7; }
+
+        /* Grid */
+        .grid {
+            display: flex;
+            gap: 18px;
+            margin-top: 44px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .grid-item {
+            padding: 32px 36px;
+            text-align: center;
+            background: #12141A;
+            min-width: 170px;
+            border: 1px solid #252830;
+            border-radius: 8px;
+        }
+
+        .slide.light .grid-item { background: #EAECF2; border-color: #D0D4E0; }
+        .grid-item .name { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .grid-item .desc { font-size: 1rem; color: #6A7080; font-weight: 300; }
+
+        /* Step */
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin: 22px 0;
+            max-width: 780px;
+            text-align: left;
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: #1428A0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+        }
+
+        .step-content { flex: 1; }
+        .step-content h4 { font-size: 1.2rem; margin-bottom: 8px; }
+        .step-content p { color: #8890A0; font-size: 1.05rem; line-height: 1.6; }
+
+        /* Warning / Tip */
+        .warn {
+            background: #14161A;
+            border-left: 3px solid #F59E0B;
+            padding: 24px 32px;
+            margin-top: 32px;
+            max-width: 680px;
+        }
+
+        .warn p { color: #F59E0B; font-size: 1.1rem; font-weight: 400; }
+
+        .tip {
+            background: #14161A;
+            border-left: 3px solid #10B981;
+            padding: 24px 32px;
+            margin-top: 32px;
+            max-width: 680px;
+        }
+
+        .tip p { color: #10B981; font-size: 1.1rem; font-weight: 400; }
+
+        /* Table */
+        .tbl { margin-top: 32px; border-collapse: collapse; }
+        .tbl th, .tbl td { padding: 18px 28px; text-align: left; border-bottom: 1px solid #252830; }
+        .tbl th { color: #5A6070; font-weight: 400; font-size: 0.95rem; letter-spacing: 0.05em; }
+        .tbl td { font-size: 1.05rem; color: #A0A8B8; }
+
+        /* Quote Box */
+        .quote-box {
+            background: #12141A;
+            border-left: 3px solid #4A8CFF;
+            padding: 28px 32px;
+            margin: 28px 0;
+            max-width: 720px;
+        }
+
+        .slide.light .quote-box { background: #E8EAF0; }
+        .quote-box p { font-size: 1.15rem; color: #A0A8B8; line-height: 1.7; font-weight: 300; }
+        .slide.light .quote-box p { color: #5A6070; }
+        .quote-box .author { margin-top: 16px; font-size: 1rem; color: #5A6070; }
+
+        /* Pipeline */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 36px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pipeline-step {
+            background: #12141A;
+            border: 1px solid #252830;
+            padding: 18px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .pipeline-step.on { background: #1428A0; border-color: #4A8CFF; }
+        .pipeline-arrow { color: #3A4050; font-size: 1.3rem; }
+
+        /* Nav */
+        .page-num {
+            position: fixed;
+            bottom: 32px;
+            right: 48px;
+            font-size: 0.85rem;
+            color: #3A4050;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 32px;
+            left: 48px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav button {
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: 1px solid #252830;
+            color: #5A6070;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav button:hover { border-color: #4A8CFF; color: #4A8CFF; }
+
+        /* Part Divider */
+        .part-divider {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 24px;
+        }
+
+        /* Images - 20% larger */
+        .slide img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 40px 24px; }
+            .comp { flex-direction: column; gap: 12px; }
+            .comp-item { min-width: auto; padding: 28px 24px; }
+            .tool-card { min-width: auto; max-width: 100%; }
+            .tool-cards { flex-direction: column; }
+            .grid { flex-direction: column; }
+            .nav { left: 20px; bottom: 20px; }
+            .page-num { right: 20px; bottom: 20px; }
+            .pipeline { gap: 8px; }
+            .pipeline-step { padding: 12px 14px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slides" id="slides">
+
+    <!-- ==================== PART 1: 마인드셋 (index.html 전체) ==================== -->
+
+    <!-- 01. Cover -->
+    <div class="slide blue">
+        <p class="part-divider">Part 1 · 마인드셋</p>
+        <h1>AI 페어프로그래밍</h1>
+        <p class="sub">AI 시대, 개발자의 새로운 역할</p>
+        <p class="meta" style="color: rgba(255,255,255,0.4);">김학민 · SE P/J · 2025.12</p>
+    </div>
+
+    <!-- 02. Intro -->
+    <div class="slide surface">
+        <h2>먼저 말씀드리자면</h2>
+        <p class="sub">AI 전문가도 아니고,<br><br>취미로 남들보다 조금 먼저 시작했고<br>관심이 있어서 이것저것 먼저 해보고<br>경험해본 사람 정도로 생각해주시면 좋겠습니다</p>
+    </div>
+
+    <!-- 03. Quote -->
+    <div class="slide">
+        <blockquote>
+            "현재 모델의 성능을<br>100% 사용하는 사람은 거의 없다"
+        </blockquote>
+        <p class="sub" style="margin-top: 40px; font-size: 0.95rem;">
+            — 많은 AI 전문가들의 공통된 의견
+        </p>
+    </div>
+
+    <!-- 04. 10% -->
+    <div class="slide">
+        <div class="big">10%</div>
+        <p class="sub">우리 대부분이 AI를 쓰는 수준</p>
+    </div>
+
+    <!-- 05. How we use AI -->
+    <div class="slide light">
+        <h2>지금 우리가 AI 쓰는 법</h2>
+        <img src="ask-reply-paste.png" alt="질문-답변-복붙" style="max-width: 670px; margin: 36px 0;">
+        <p class="sub">질문 → 답변 → 복붙 → 끝<br>이건 AI를 <strong class="em">검색 엔진</strong>으로 쓰는 것</p>
+    </div>
+
+    <!-- 06. Gabriel Peterson -->
+    <div class="slide surface">
+        <h2>최근 화제가 된 인터뷰</h2>
+        <p class="sub" style="font-size: 1.1rem; color: #A0A8B8; max-width: 620px;">
+            고등학교 중퇴 후 ChatGPT로 머신러닝을 독학해<br>
+            박사급이 즐비한 <span class="em">OpenAI 연구원</span>이 된 사람
+        </p>
+        <div class="quote-box">
+            <p>"AI에게 반복 질문하며 지식을 쌓다 보니<br>어느 순간 전체 구조가 보이기 시작했다."</p>
+            <div class="author">— Gabriel Peterson, OpenAI (Sora 개발 참여) · 2025.11</div>
+        </div>
+    </div>
+
+    <!-- 07. Recursive Gap Filling -->
+    <div class="slide">
+        <h2>Recursive Gap Filling</h2>
+        <p class="sub" style="margin-bottom: 40px;">재귀적 틈새 메우기</p>
+        <ul class="list">
+            <li>실제 문제를 먼저 접한다</li>
+            <li>AI에게 해결 방법을 묻고 코드를 생성한다</li>
+            <li>이해 안 되면 <strong>"12살에게 설명하듯이"</strong> 다시 묻는다</li>
+            <li>반복하다 보면 <strong class="em">전체 구조가 보인다</strong></li>
+        </ul>
+    </div>
+
+    <!-- 08. Chatbot vs Agent -->
+    <div class="slide surface">
+        <h2>챗봇 시대 → Agent 시대</h2>
+        <div class="comp">
+            <div class="comp-item">
+                <p class="tag">Before</p>
+                <p>질문 → 답변</p>
+            </div>
+            <div class="comp-item on">
+                <p class="tag">After</p>
+                <p>작업 위임 → 실행 → 검증</p>
+            </div>
+        </div>
+        <p class="sub">한 번의 주고받기가 아니라<br>AI가 알아서 수행하고 보고</p>
+    </div>
+
+    <!-- 09. Agent Example -->
+    <div class="slide surface">
+        <h3>Agent 시대의 업무 방식</h3>
+        <div class="code">나: "로그 파싱 모듈 리팩토링해줘.
+    기존 테스트 유지하고, 새 기능 테스트도 추가해."
+
+AI: 파일 분석 중...
+    → 기존 테스트 확인
+    → 리팩토링 진행
+    → 새 테스트 작성
+    → 전체 테스트 실행 (32/32 pass)
+    → 결과 보고
+
+나: (diff 검토 후 승인)</div>
+        <p class="sub" style="margin-top: 24px;">내가 코드 한 줄 안 쳐도 작업이 완료됨</p>
+    </div>
+
+    <!-- 10. Outsource -->
+    <div class="slide">
+        <h1><span class="em">고민</span>을<br>아웃소싱하세요</h1>
+        <p class="sub">"이 문제 어떻게 풀지?" 혼자 고민 ✗<br>"같이 생각해보자" AI에게 던지기 ✓</p>
+    </div>
+
+    <!-- 11. Outsource Example -->
+    <div class="slide surface">
+        <img src="kakaotalk-screen.png" alt="카카오톡 AI 대화" style="max-width: 540px; margin-bottom: 28px; border-radius: 8px;">
+        <p class="sub">적당히만 아웃소싱하고<br><span class="em">최종 점검은 직접</span> 하자</p>
+    </div>
+
+    <!-- 12. Master Chef -->
+    <div class="slide light">
+        <h1 style="color: #0A0A0F;">마스터셰프가 되어라</h1>
+        <img src="master-chef.png" alt="마스터셰프" style="max-width: 580px; border-radius: 8px; margin: 28px 0;">
+        <p class="sub">직접 모든 요리를 하지 않는다 · 각 스테이션을 <strong>지휘</strong>한다<br>품질을 <strong>책임</strong>진다 · <strong class="em">마지막 터치는 직접</strong></p>
+    </div>
+
+    <!-- 12. Definition of Work -->
+    <div class="slide surface">
+        <h2>"일"의 정의가 바뀐다</h2>
+        <div class="comp">
+            <div class="comp-item">
+                <p class="tag">예전</p>
+                <p>문제 → 직접 해결</p>
+            </div>
+            <div class="comp-item on">
+                <p class="tag">지금</p>
+                <p>찾기 + 전달 + 검증</p>
+            </div>
+        </div>
+        <p class="sub">코드 치는 시간 ↓<br>문제 정의 + 검증 시간 ↑</p>
+    </div>
+
+    <!-- 13. Vibe Coding -->
+    <div class="slide mint">
+        <h2>Vibe Coding</h2>
+        <img src="vibe-coding.png" alt="Vibe Coding" style="max-width: 580px; margin: 28px 0; border-radius: 8px;">
+        <p class="sub">Andrej Karpathy (2025.02)<br>"코드가 존재한다는 것 자체를 잊어버리는 코딩"</p>
+    </div>
+
+    <!-- 14. Vibe Coding Now -->
+    <div class="slide">
+        <h2>"바이브코딩"이라는 말이<br>사라지고 있다</h2>
+        <p class="sub" style="font-size: 1.4rem; margin-top: 48px;">왜냐하면 이젠<br>코딩이 그냥 <span class="em">바이브코딩</span>이니까</p>
+    </div>
+
+    <!-- 15. Don't Learn Tools -->
+    <div class="slide surface">
+        <h1>Tool 사용법도 중요하지만<br>또 그렇게 중요하진 않습니다</h1>
+        <p class="sub">원리를 이해하면 모든 도구가 같은 형식임을 알 수 있고<br>더 좋은 도구가 계속 나오기 때문에<br><strong>매번 새로 학습한다는 마인드</strong>가 필요합니다<br><br><span style="font-size: 0.9rem; opacity: 0.7;">Antigravity 출시 이후 Cursor도 오늘내일...</span></p>
+    </div>
+
+    <!-- 16. Formula -->
+    <div class="slide blue">
+        <p class="formula" style="font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 700;">
+            <span class="em">Model</span> × <span style="opacity:0.6">Harness</span> × <span class="em">Pilot</span>
+        </p>
+        <p class="sub">AI 페어프로그래밍의 세 가지 요소</p>
+    </div>
+
+    <!-- 17. Model -->
+    <div class="slide">
+        <h2>Model</h2>
+        <p class="sub">어떤 LLM을 사용하느냐</p>
+        <table class="tbl">
+            <tr><th>Model</th><th>SWE-bench</th><th>Note</th></tr>
+            <tr><td><strong class="em">Claude Opus 4.5</strong></td><td>80.9%</td><td>코딩 최강</td></tr>
+            <tr><td>GPT-5.1-Codex-Max</td><td>77.9%</td><td>24시간 자율</td></tr>
+            <tr><td>Claude Sonnet 4.5</td><td>77.2%</td><td>가성비</td></tr>
+        </table>
+        <p class="sub" style="font-size: 0.95rem;">순위에 집착 ✗ · 어차피 매주 바뀜</p>
+    </div>
+
+    <!-- 18. Harness -->
+    <div class="slide surface">
+        <h2>Agentic Harness</h2>
+        <p class="sub">Model을 둘러싼 도구와 환경</p>
+        <div class="grid">
+            <div class="grid-item">
+                <p class="name em">Agent</p>
+                <p class="desc">Cursor, Claude Code, Cline</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">Tools</p>
+                <p class="desc">파일, 웹, API, 터미널</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">Context</p>
+                <p class="desc">CLAUDE.md, .cursorrules</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 19. Harness Light -->
+    <div class="slide">
+        <h2>Harness는 가볍게</h2>
+        <div class="warn">
+            <p>MCP 좋다고 이것저것 등록하면<br>오히려 AI가 헤맵니다</p>
+        </div>
+        <p class="sub">Tool이 적을수록 Model이 집중<br>Model이 똑똑해질수록 Harness는 가벼워져야 함</p>
+    </div>
+
+    <!-- 20. Useful MCPs -->
+    <div class="slide surface">
+        <h3>그래도 유용한 MCP들</h3>
+        <div class="grid">
+            <div class="grid-item">
+                <p class="name em">Context7</p>
+                <p class="desc">라이브러리 문서 자동 참조</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">Serena</p>
+                <p class="desc">코드베이스 분석/탐색</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">Magic</p>
+                <p class="desc">UI 컴포넌트 생성</p>
+            </div>
+        </div>
+        <p class="sub" style="font-size: 0.95rem;">전부 다 쓰지 말고, 용도에 맞게 선택적으로</p>
+    </div>
+
+    <!-- 21. Pilot -->
+    <div class="slide violet">
+        <h1><span class="em">Pilot</span></h1>
+        <p class="sub">가장 중요한 요소 = 당신</p>
+    </div>
+
+    <!-- 22. Pilot Skills -->
+    <div class="slide surface">
+        <h3>Pilot의 핵심 역량</h3>
+        <ul class="list">
+            <li><strong>문제 분해</strong> — 복잡한 문제를 AI가 처리 가능한 단위로</li>
+            <li><strong>실패 패턴 인식</strong> — 할루시네이션, 컨텍스트 한계 예측</li>
+            <li><strong>도메인 지식</strong> — AI 출력의 적절성을 즉시 판단</li>
+            <li><strong class="em">파이프라인 설계</strong> — 반복 가능한 워크플로우 구축</li>
+        </ul>
+    </div>
+
+    <!-- 23. Problem Decomposition -->
+    <div class="slide">
+        <h2>문제 분해 예시</h2>
+        <div class="comp">
+            <div class="comp-item">
+                <p class="tag">Bad</p>
+                <p style="font-size:1rem">"이커머스 사이트<br>만들어줘"</p>
+            </div>
+            <div class="comp-item on">
+                <p class="tag">Good</p>
+                <p style="font-size:0.95rem">1단계: 상품 목록<br>2단계: 상세 페이지<br>3단계: 장바구니<br>각 단계 검증 후 진행</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 24. Pipeline -->
+    <div class="slide surface">
+        <h2>파이프라인을 구축하자</h2>
+        <div class="pipeline">
+            <div class="pipeline-step">요구사항 분석</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">PRD 작성</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">TDD 개발</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">코드 리뷰</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step on">검증</div>
+        </div>
+        <p class="sub">각 단계에 AI 역할을 부여</p>
+    </div>
+
+    <!-- 25. Role Assignment -->
+    <div class="slide">
+        <h3>AI에게 역할 부여하기</h3>
+        <div class="code" style="font-size: 0.85rem;">"너는 시니어 요구사항 분석가야. 스펙의 핵심을 정리해줘."
+
+"너는 PRD 작성 전문가야. 요구사항 기반으로 문서 작성해줘."
+
+"너는 TDD의 달인이야. 테스트 먼저 작성하고 구현해줘."
+
+"너는 코드리뷰의 화신이야. MISRA C 기준으로 검토해줘."</div>
+        <p class="sub" style="font-size: 0.95rem;">같은 AI도 역할에 따라 다른 관점으로 작업</p>
+    </div>
+
+    <!-- 26. Context Engineering -->
+    <div class="slide violet">
+        <h1>Context<br>Engineering</h1>
+        <p class="sub">같은 AI, 같은 요청이라도<br><span class="em">맥락</span>에 따라 결과가 완전히 다름</p>
+    </div>
+
+    <!-- 27. Context Example -->
+    <div class="slide surface">
+        <div class="comp">
+            <div class="comp-item">
+                <p class="tag">맥락 없이</p>
+                <p style="font-size:0.95rem">"페이지 매핑 테이블<br>구조체 만들어줘"</p>
+            </div>
+            <div class="comp-item on">
+                <p class="tag">맥락 제공</p>
+                <p style="font-size:0.9rem">"HIL 모듈용, 4KB 페이지,<br>2TB 지원, MISRA C 2012,<br>ftl_types.h 호환"</p>
+            </div>
+        </div>
+        <p class="sub">이 맥락을 CLAUDE.md에 정리해두면 됨</p>
+    </div>
+
+    <!-- 28. Three Elements -->
+    <div class="slide">
+        <h2>세 가지가 맞으면</h2>
+        <p class="sub">Model이 좋아지든, Harness가 발전하든<br><br><strong class="em">여러분에게는 생산성 향상밖에<br>일어나지 않습니다</strong></p>
+    </div>
+
+    <!-- 29. 실전 Title -->
+    <div class="slide orange">
+        <h1>실전</h1>
+        <p class="sub">파이프라인을 어떻게 구축할 것인가</p>
+    </div>
+
+    <!-- 30. TDD -->
+    <div class="slide surface">
+        <h2>실전: TDD</h2>
+        <div class="comp">
+            <div class="comp-item">
+                <p class="tag">인간</p>
+                <p>"나중에 테스트..."</p>
+            </div>
+            <div class="comp-item on">
+                <p class="tag">AI</p>
+                <p>귀찮다는 개념 없음<br>정교하게, 일관되게</p>
+            </div>
+        </div>
+        <p class="sub">TDD는 AI에게 시키기 최적의 작업</p>
+        <div class="tip" style="margin-top: 28px;">
+            <p>TDD의 아버지 <strong>켄트 벡</strong>이 다시 강연 다니는 중</p>
+        </div>
+    </div>
+
+    <!-- 31. Multi Process -->
+    <div class="slide surface">
+        <h2>실전: 멀티 프로세스</h2>
+        <p class="sub" style="max-width: 600px;">
+            여유가 생겼다면 <strong class="em">병렬로 돌리세요</strong>
+        </p>
+        <p class="sub" style="margin-top: 28px; font-size: 1.1rem;">
+            다양한 업무를 병렬로 수행하거나<br>
+            다른 일도 해보거나, 모르는 부분 찾거나..<br>
+            <span style="opacity: 0.6;">(핸드폰하거나)</span>
+        </p>
+    </div>
+
+    <!-- 32. Observation -->
+    <div class="slide">
+        <h2>실전: 관찰하기</h2>
+        <img src="thinking-developer.png" alt="관찰하는 개발자" style="max-width: 430px; margin: 28px 0;">
+        <p class="sub">AI 작업 중 (2-3분) 관찰하면서 질문하기<br>"왜 이 파일을 먼저?" "왜 여기서 막혔지?"</p>
+    </div>
+
+    <!-- 33. AI Slop -->
+    <div class="slide surface">
+        <h2>⚠️ AI Slop 주의</h2>
+        <img src="ai-slop.png" alt="AI Slop" style="max-width: 600px; margin: 36px 0;">
+        <p class="sub">AI 생성 코드를 <span class="red">검증 없이</span> 그대로 쓰는 것</p>
+    </div>
+
+    <!-- 34. AI Slop Case -->
+    <div class="slide surface">
+        <h3>실제 사례 (2025.05)</h3>
+        <p class="sub" style="font-size: 1.25rem; color: #F0F0F5;">Lovable에서 생성된 1,645개 웹앱 중<br><span class="red">170개에서 개인정보 유출 취약점</span> 발견</p>
+        <p class="sub" style="margin-top: 48px;"><strong class="em">마지막 터치는 여러분이 해야 합니다</strong></p>
+    </div>
+
+    <!-- 35. Vibe Coding Trap -->
+    <div class="slide">
+        <img src="vibe-coding-trap.png" alt="바이브코딩의 함정" style="max-width: 960px; margin-bottom: 36px;">
+        <p class="sub" style="font-size: 1.15rem;">
+            "입으로 코딩하면 되겠네?" 하고 덤볐던 사람들<br>
+            <span class="red">결국 아무것도 완성 못함</span><br><br>
+            <strong class="em">도메인 지식 없이는 검증도, 방향 설정도 불가능</strong>
+        </p>
+    </div>
+
+    <!-- 36. Code is Liability -->
+    <div class="slide">
+        <h1>코드는 <span class="red">부채</span>다</h1>
+        <p class="sub">자산이 아닙니다<br>유지보수 부담, 버그, 기술 부채<br><br>필요한 <strong>최소한의 코드</strong>만 유지</p>
+    </div>
+
+    <!-- 37. AI Makes Docs -->
+    <div class="slide mint">
+        <h1>AI는 코드보다<br><span class="em">문서</span>를 더 잘 만든다</h1>
+        <p class="sub">발표 자료, 기술 문서, 보고서, 스프레드시트<br>"HTML로 멋진 문서 만들어줘" → 기가 막히게</p>
+    </div>
+
+    <!-- 38. NotebookLM -->
+    <div class="slide surface">
+        <h2>Google NotebookLM</h2>
+        <p class="sub" style="margin-top: 0; margin-bottom: 24px; font-size: 1.4rem; color: #F0F0F5;">
+            문서 업로드 → <span class="em">팟캐스트 형식 오디오북</span> 자동 생성
+        </p>
+        <img src="notebooklm-screen.png" alt="NotebookLM" style="max-width: 95vw; width: 1200px; margin: 20px 0; border-radius: 8px; border: 1px solid #252830;">
+        <p class="sub" style="font-size: 1rem;">PPT, 논문, 기술 문서 → 출퇴근길에 듣기</p>
+    </div>
+
+    <!-- 39. Future Title -->
+    <div class="slide">
+        <h1>심화: 미래</h1>
+        <p class="sub">이걸 <span class="em">완전 자동화</span>한다면?</p>
+    </div>
+
+    <!-- 40. Automation Detail -->
+    <div class="slide surface">
+        <h3>완전 자동화 시나리오</h3>
+        <div class="pipeline" style="font-size: 0.8rem;">
+            <div class="pipeline-step">JIRA MCP로<br>이슈 자동 수집</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">스스로 분석<br>& 해결</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">Git Push</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step">빌드 & 테스트</div>
+            <span class="pipeline-arrow">→</span>
+            <div class="pipeline-step on">실패 시<br>처음부터</div>
+        </div>
+        <p class="sub" style="margin-top: 40px;">성공하면 TR까지 자동 생성...</p>
+    </div>
+
+    <!-- 41. 그러면 우리는? -->
+    <div class="slide">
+        <h2>그러면 우리는...?</h2>
+        <img src="confused-developer.png" alt="고민하는 개발자" style="max-width: 620px; margin: 28px 0; border-radius: 8px;">
+        <p class="sub" style="font-size: 1.3rem;">모르겠음..<br><br><span class="em">일단 열심히 하는 수밖에</span></p>
+    </div>
+
+    <!-- 42. Summary Part 1 -->
+    <div class="slide surface">
+        <h2>Part 1 정리</h2>
+        <ul class="list">
+            <li><strong class="em">고민을 아웃소싱</strong> — 생각 자체를 AI와 나누기</li>
+            <li><strong>마스터셰프가 되세요</strong> — 직접 요리 ✗, 주방 지휘 ✓</li>
+            <li><strong>Tool보다 원리</strong> — 도구는 계속 바뀝니다</li>
+            <li><strong class="em">Context Engineering</strong> — 맥락 설계가 품질 결정</li>
+            <li><strong>마지막 터치는 직접</strong> — AI Slop 금지</li>
+        </ul>
+    </div>
+
+    <!-- 43. Final Part 1 -->
+    <div class="slide">
+        <h1>"코딩 잘하는 사람"이<br>아니라</h1>
+    </div>
+
+    <!-- 44. Final Part 1 - 2 -->
+    <div class="slide blue">
+        <h1><span class="em">"무엇을 만들어야<br>하는지 아는 사람"</span>이<br>이깁니다</h1>
+    </div>
+
+    <!-- ==================== PART 2: 도구와 실전 (index2.html) ==================== -->
+
+    <!-- 45. Part 2 Cover -->
+    <div class="slide blue">
+        <p class="part-divider">Part 2 · 도구와 실전</p>
+        <h1>도구 선택과<br>실전 워크플로우</h1>
+        <p class="sub">도구 선택 → 환경 구축 → 워크플로우 실습</p>
+    </div>
+
+    <!-- 46. Goal -->
+    <div class="slide surface">
+        <h2>오늘의 목표</h2>
+        <p class="sub" style="font-size: 1.4rem;">
+            <span class="em">도구 선택</span> → <span class="em">환경 구축</span> → <span class="em">워크플로우 실습</span>
+        </p>
+        <p class="sub" style="margin-top: 48px; font-size: 1rem; opacity: 0.7;">
+            외부망 연결 후 POC를 진행하게 됩니다<br>
+            그 전에 도구와 방법론을 미리 익혀두자
+        </p>
+    </div>
+
+    <!-- 47. Tool Landscape -->
+    <div class="slide">
+        <h2>2025년 12월 기준<br>AI 코딩 도구 지형도</h2>
+        <p class="sub">추천 도구 3가지 + 보조 도구 1가지</p>
+    </div>
+
+    <!-- 48. Three Tools -->
+    <div class="slide surface">
+        <div class="tool-cards">
+            <div class="tool-card recommended">
+                <p class="name" style="color: #10B981;">Claude Code</p>
+                <p class="desc">Anthropic 공식 CLI<br>터미널 기반 Agent</p>
+                <span class="tag green">최강 코딩</span>
+                <span class="tag">Opus 4.5</span>
+                <span class="tag yellow">$100/월~</span>
+            </div>
+            <div class="tool-card">
+                <p class="name">Cursor</p>
+                <p class="desc">VS Code 포크<br>가장 대중적인 선택</p>
+                <span class="tag blue">안정적</span>
+                <span class="tag">Agent 탑급</span>
+                <span class="tag">$20~60/월</span>
+            </div>
+            <div class="tool-card hot">
+                <p class="name" style="color: #F59E0B;">Antigravity</p>
+                <p class="desc">Google의 신무기<br>Gemini 3 Pro 기반</p>
+                <span class="tag yellow">무료 (현재)</span>
+                <span class="tag">한도 넉넉</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 49. My Opinion -->
+    <div class="slide">
+        <h2>개인적인 의견</h2>
+        <div class="quote-box">
+            <p>다 써봤지만 결국 <strong class="em">Claude Code</strong>만한 게 없었습니다.<br><br>
+            기왕 몇만원 더 쓸 거면 제일 좋은 거 쓰고 싶다면<br>
+            → Claude Code가 나은 선택</p>
+        </div>
+    </div>
+
+    <!-- 50. Cursor Always Right -->
+    <div class="slide surface">
+        <h2>하지만 Cursor는 항상 옳은 선택</h2>
+        <ul class="list">
+            <li><strong>최선단 업체</strong> — AI IDE 분야 선두 주자</li>
+            <li><strong>Agent 기능 탑급</strong> — 멀티파일 수정, 커맨드 실행</li>
+            <li><strong>낮은 학습 곡선</strong> — VS Code와 동일한 UI</li>
+            <li><strong>합리적 가격</strong> — Pro $20, Pro Plus $60</li>
+        </ul>
+        <p class="sub">익숙한 환경에서 시작하고 싶다면 Cursor</p>
+    </div>
+
+    <!-- 51. Antigravity Now -->
+    <div class="slide google">
+        <h1>Antigravity의 현재</h1>
+        <p class="sub">
+            Google이 작정하고 <span class="em">무료로 풀었음</span><br><br>
+            Gemini 3 Pro 기반, 한도도 넉넉<br>
+            현재 기준으로는 Cursor 쓸 이유가 없긴 함<br><br>
+            <span style="font-size: 0.9rem; opacity: 0.7;">단, "무료는 지금뿐"일 수 있음 — Preview 단계</span>
+        </p>
+    </div>
+
+    <!-- 52. Codex CLI -->
+    <div class="slide surface">
+        <h3>보조 도구: OpenAI Codex CLI</h3>
+        <div class="comp">
+            <div class="comp-item">
+                <p class="tag">장점</p>
+                <p style="font-size: 1rem;">토큰 효율 좋음<br>가격 저렴</p>
+            </div>
+            <div class="comp-item">
+                <p class="tag">단점</p>
+                <p style="font-size: 1rem;">UX가 아쉬움<br>Claude Code보다 약함</p>
+            </div>
+        </div>
+        <p class="sub">코드 리뷰, 간단한 작업을<br><span class="em">Sub-Agent</span>처럼 쓸 때 유용</p>
+    </div>
+
+    <!-- 53. Summary Table -->
+    <div class="slide">
+        <h3>도구 선택 가이드</h3>
+        <table class="tbl">
+            <tr><th>상황</th><th>추천</th></tr>
+            <tr><td>최고 성능, 비용 무관</td><td><strong class="green">Claude Code</strong> (Max $100)</td></tr>
+            <tr><td>안정적, 익숙한 환경</td><td><strong class="em">Cursor</strong> (Pro $20~60)</td></tr>
+            <tr><td>무료로 시작하고 싶다</td><td><strong class="yellow">Antigravity</strong> (무료)</td></tr>
+            <tr><td>보조 도구, 서브 작업</td><td>Codex CLI</td></tr>
+        </table>
+    </div>
+
+    <!-- 54. Prerequisites -->
+    <div class="slide surface">
+        <h3>사전 설치 (필수)</h3>
+        <table class="tbl">
+            <tr><th>도구</th><th>용도</th><th>설치</th></tr>
+            <tr><td><strong>Node.js 18+</strong></td><td>Claude Code 실행</td><td>nodejs.org</td></tr>
+            <tr><td><strong>npm</strong></td><td>패키지 관리</td><td>Node.js에 포함</td></tr>
+            <tr><td><strong>Python 3.10+</strong></td><td>스크립트, MCP</td><td>python.org</td></tr>
+            <tr><td><strong>pip</strong></td><td>Python 패키지</td><td>Python에 포함</td></tr>
+            <tr><td><strong>Git</strong></td><td>버전 관리</td><td>git-scm.com</td></tr>
+        </table>
+        <p class="sub" style="font-size: 0.9rem;">Java는 필요시 설치 (일부 MCP에서 사용)</p>
+    </div>
+
+    <!-- 55. Claude Code Section -->
+    <div class="slide mint">
+        <h1>Claude Code</h1>
+        <p class="sub">SWE-bench <span class="em">80.9%</span> — 역대 최고 기록<br>Opus 4.5 기반, 터미널에서 동작하는 Agent</p>
+    </div>
+
+    <!-- 56. Claude Code Pricing -->
+    <div class="slide surface">
+        <h3>Claude Code 요금제</h3>
+        <table class="tbl">
+            <tr><th>플랜</th><th>가격</th><th>특징</th></tr>
+            <tr><td>Pro</td><td>$20/월</td><td><span class="red">한도 부족 — 실사용 어려움</span></td></tr>
+            <tr><td><strong class="green">Max 5x</strong></td><td><strong>$100/월</strong></td><td>Opus 4.5 풀 액세스, 실무용</td></tr>
+            <tr><td>Max 20x</td><td>$200/월</td><td>무제한급, 파워유저용</td></tr>
+        </table>
+        <div class="warn">
+            <p>⚠️ $20 Pro는 제한이 너무 작아서 Claude Code 제대로 못 씀<br>
+            최소 <strong>$100 Max</strong>부터 시작해야 의미 있음</p>
+        </div>
+    </div>
+
+    <!-- 57. Claude Code Install -->
+    <div class="slide">
+        <h3>Claude Code 설치</h3>
+        <div class="code"><span class="comment"># Node.js 18+ 필요</span>
+npm install -g @anthropic-ai/claude-code
+
+<span class="comment"># 설치 확인</span>
+claude --version
+
+<span class="comment"># 최초 실행 → 브라우저에서 로그인</span>
+claude</div>
+        <p class="sub">Max 요금제 구독 후 로그인하면 바로 사용 가능</p>
+    </div>
+
+    <!-- 58. CLAUDE.md -->
+    <div class="slide violet">
+        <h1>CLAUDE.md</h1>
+        <p class="sub">프로젝트의 <span class="em">맥락</span>을 알려주는 파일<br><br>이것 하나로 AI 출력 품질이 완전히 달라짐</p>
+    </div>
+
+    <!-- 59. CLAUDE.md Example -->
+    <div class="slide surface">
+        <h3>CLAUDE.md 예시 (SSD FW)</h3>
+        <div class="code"><span class="keyword"># Project: SSD FW GC Module</span>
+
+<span class="keyword">## 코딩 컨벤션</span>
+- MISRA C 2012 준수
+- 함수명: snake_case / 매크로: UPPER_SNAKE_CASE
+- 들여쓰기: 4 spaces (탭 금지)
+
+<span class="keyword">## 빌드 & 테스트</span>
+make -j8 TARGET=release
+make test SUITE=gc_unit
+
+<span class="keyword">## 절대 금지</span>
+- 동적 메모리 할당 (malloc/free) ❌
+- 전역 변수 남용 ❌
+- 주석 없는 복잡한 로직 ❌
+
+<span class="keyword">## 필수</span>
+- 모든 함수에 Doxygen 주석
+- 에러 핸들링 명시적으로</div>
+    </div>
+
+    <!-- 60. Cursor Section -->
+    <div class="slide orange">
+        <h1>Cursor</h1>
+        <p class="sub">가장 대중적인 AI IDE<br>VS Code 기반, 낮은 진입장벽</p>
+    </div>
+
+    <!-- 61. Cursor Pricing -->
+    <div class="slide surface">
+        <h3>Cursor 요금제 (2025.12)</h3>
+        <table class="tbl">
+            <tr><th>플랜</th><th>가격</th><th>특징</th></tr>
+            <tr><td>Pro</td><td>$20/월</td><td>기본 사용, 가벼운 작업</td></tr>
+            <tr><td><strong class="em">Pro Plus</strong></td><td><strong>$60/월</strong></td><td>$70 크레딧 + Background Agent</td></tr>
+            <tr><td>Ultra</td><td>$200/월</td><td>20x 사용량, 파워유저</td></tr>
+        </table>
+        <p class="sub" style="font-size: 0.95rem;">Agent 많이 쓰면 <strong>$60~100/월</strong> 수준</p>
+    </div>
+
+    <!-- 62. Cursor Shortcuts -->
+    <div class="slide">
+        <h3>Cursor 핵심 단축키</h3>
+        <div class="grid">
+            <div class="grid-item">
+                <p class="name">Cmd+K</p>
+                <p class="desc">코드 생성/수정</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">Cmd+L</p>
+                <p class="desc">채팅 열기</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">Cmd+I</p>
+                <p class="desc">Composer<br>(멀티파일)</p>
+            </div>
+            <div class="grid-item">
+                <p class="name">@파일명</p>
+                <p class="desc">컨텍스트 추가</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 63. .cursorrules -->
+    <div class="slide surface">
+        <h3>.cursorrules</h3>
+        <div class="code"><span class="comment"># Cursor용 컨텍스트 파일 (CLAUDE.md와 동일 역할)</span>
+
+You are an expert SSD firmware engineer.
+Follow MISRA C 2012 guidelines strictly.
+Never use dynamic memory allocation.
+Always write unit tests first (TDD approach).
+Use Doxygen-style comments for all functions.
+Respond in Korean when explaining.</div>
+        <p class="sub">CLAUDE.md ≈ .cursorrules (도구만 다름)</p>
+    </div>
+
+    <!-- 64. Antigravity Section -->
+    <div class="slide google">
+        <h1>Antigravity</h1>
+        <p class="sub">Google의 야심작<br>Gemini 3 Pro + 무료 전략</p>
+    </div>
+
+    <!-- 65. Antigravity Features -->
+    <div class="slide surface">
+        <h3>Antigravity 특징</h3>
+        <ul class="list">
+            <li><strong class="yellow">무료</strong> — 현재 Preview 단계, 한도 넉넉</li>
+            <li><strong>Gemini 3 Pro</strong> — 코딩 성능 준수</li>
+            <li><strong>주간 한도제</strong> — 일별이 아닌 주별 리셋</li>
+            <li><strong>작업량 기반</strong> — 요청 수가 아닌 "일한 양"으로 계산</li>
+            <li><strong>Claude, GPT 지원</strong> — 타사 모델도 사용 가능</li>
+        </ul>
+        <div class="tip">
+            <p>💡 무료로 시작하기 좋음, 단 언제 유료화될지 모름</p>
+        </div>
+    </div>
+
+    <!-- 66. Workflow Section -->
+    <div class="slide blue">
+        <h1>워크플로우<br>파이프라인 구축</h1>
+        <p class="sub">도구를 알았으니 이제 <span class="em">어떻게 쓸지</span></p>
+    </div>
+
+    <!-- 67. Outsource Thinking -->
+    <div class="slide">
+        <h1><span class="em">생각</span>과 <span class="em">문제</span>를<br>아웃소싱하자</h1>
+        <p class="sub">"이 문제 어떻게 풀지?" 혼자 고민 ✗<br>"같이 생각해보자" AI에게 던지기 ✓</p>
+    </div>
+
+    <!-- 68. Multi Process Detail -->
+    <div class="slide surface">
+        <h2>여유가 생겼다면</h2>
+        <ul class="list">
+            <li><strong class="em">왜 이렇게 동작하는지</strong> 물어보자</li>
+            <li><strong>어디서 헤매는지</strong> 확인해보자</li>
+            <li><strong>멀티 프로세스</strong>로 병렬 작업 돌리자</li>
+        </ul>
+        <p class="sub" style="margin-top: 32px; font-size: 1rem;">
+            <span class="em">게임 오토모드</span> 돌리듯<br>
+            AI한테 시켜놓고 결과만 확인하는 것도 방법
+        </p>
+    </div>
+
+    <!-- 68. Practice Docs -->
+    <div class="slide surface">
+        <h3>문서화 연습해보자</h3>
+        <ul class="list">
+            <li><strong>발표 자료</strong> — 지금 구성한 것들 정리</li>
+            <li><strong>기술 문서</strong> — 모듈 설계서, API 명세</li>
+            <li><strong>보고서</strong> — 주간/월간 업무 보고</li>
+            <li><strong>스프레드시트</strong> — 테스트 결과, 일정표</li>
+        </ul>
+        <p class="sub" style="font-size: 0.95rem;">코드보다 문서 만드는 연습부터 시작하면 진입장벽 낮음</p>
+    </div>
+
+    <!-- 69. Pipeline Concept -->
+    <div class="slide surface">
+        <h3>파이프라인을 구축하자</h3>
+        <div class="quote-box">
+            <p>반복되는 작업 흐름을 <strong>자동화 가능한 단위</strong>로 구조화<br><br>
+            AI에게 각 단계별 <strong>역할</strong>을 부여하고<br>
+            검증 포인트를 명확히 설정</p>
+        </div>
+    </div>
+
+    <!-- 70. Role Assignment Detail -->
+    <div class="slide">
+        <h3>AI에게 역할 부여하기 (예시)</h3>
+        <div class="code" style="font-size: 0.95rem; text-align: center;"><span class="string">"너는 요구사항 분석가야"</span>
+<span class="string">"너는 PRD 문서 생성가야"</span>
+<span class="string">"너는 TDD 개발의 달인이야"</span>
+<span class="string">"너는 테스트의 신이야"</span>
+<span class="string">"너는 코드리뷰의 화신이야"</span></div>
+        <p class="sub">이건 예시일 뿐 — <span class="em">직접 만들 필요 없음</span></p>
+    </div>
+
+    <!-- 71. Find Best Template -->
+    <div class="slide surface">
+        <h2>세상에서 가장 좋은<br>템플릿을 찾아서 적용하자</h2>
+        <p class="sub" style="margin-top: 40px;">
+            웹검색 + 챗봇으로 연구해서<br>
+            이미 검증된 템플릿을 가져오면 됨<br><br>
+            <span style="font-size: 0.95rem; opacity: 0.7;">(이 정도는 Model이 똑똑해서 알아서 만들어줌)</span>
+        </p>
+    </div>
+
+    <!-- 72. Loopback Workflow -->
+    <div class="slide">
+        <h3>루프백 워크플로우 요청 예시</h3>
+        <div class="code" style="font-size: 0.85rem;">"요구사항 분석 → PRD 문서 생성 → TDD 개발
+→ 테스트 → 코드리뷰
+
+이 파이프라인이 <span class="string">루프백 방식</span>으로 동작하도록
+워크플로우 구성해줘.
+테스트 실패하면 TDD로 돌아가고,
+코드리뷰에서 문제 발견되면 해당 단계로 돌아가게."</div>
+        <p class="sub">이렇게 요청하면 AI가 어떻게 동작하는지 확인해보자</p>
+    </div>
+
+    <!-- 73. Give Tools -->
+    <div class="slide surface">
+        <h3>각 파이프라인에 도구를 쥐어주자</h3>
+        <div class="code" style="font-size: 0.8rem;"><span class="comment"># 요구사항 분석 단계</span>
+"Context7 MCP를 활용해서 라이브러리 문서 참조해"
+"스펙 문서 /docs/spec_v2.md 를 확인해"
+
+<span class="comment"># TDD 개발 단계</span>
+"TDD에 대해서 1분 이상 고민하고 시작해"
+"우리 회사 코드 컨벤션 /docs/coding_rule.md 참조해"
+
+<span class="comment"># 코드 리뷰 단계</span>
+"MISRA C 2012 기준으로 검토해"
+"보안 취약점 위주로 확인해"</div>
+    </div>
+
+    <!-- 74. Claude Code Pipeline -->
+    <div class="slide">
+        <h3>Claude Code 파이프라인 예시</h3>
+        <div class="code"><span class="comment"># 1. 분석 단계</span>
+> 이 모듈 구조 분석하고 개선점 찾아줘
+
+<span class="comment"># 2. TDD 설정</span>
+> wear_leveling 함수 테스트 케이스 먼저 작성해줘
+
+<span class="comment"># 3. 구현</span>
+> 테스트 통과하도록 구현해줘
+
+<span class="comment"># 4. 검증</span>
+> make test 실행하고 결과 보여줘
+
+<span class="comment"># 5. 리뷰 요청</span>
+> MISRA C 기준으로 셀프 리뷰해줘</div>
+    </div>
+
+    <!-- 75. Cursor Pipeline -->
+    <div class="slide surface">
+        <h3>Cursor 파이프라인 예시</h3>
+        <div class="code"><span class="comment"># Composer (Cmd+I)에서</span>
+
+@gc_manager.c @gc_types.h @test_gc.c
+
+이 세 파일 기반으로:
+1. wear_leveling 함수 테스트 케이스 추가
+2. 함수 리팩토링 (가독성 개선)
+3. MISRA C 위반 사항 체크
+4. 빌드 테스트 실행
+
+각 단계 완료 후 확인받고 진행해줘</div>
+        <p class="sub">@로 파일 컨텍스트 추가 → 멀티파일 작업</p>
+    </div>
+
+    <!-- 76. FW Workflow -->
+    <div class="slide mint">
+        <h1>FW 개발용<br>워크플로우</h1>
+        <p class="sub">임베디드/펌웨어 특화 접근법</p>
+    </div>
+
+    <!-- 77. FW Specific -->
+    <div class="slide surface">
+        <h3>FW 개발 시 주의점</h3>
+        <ul class="list">
+            <li><strong>MISRA C</strong> — CLAUDE.md에 명시 필수</li>
+            <li><strong>동적 할당 금지</strong> — malloc/free 사용하지 말라고 명시</li>
+            <li><strong>하드웨어 의존성</strong> — 시뮬레이션 환경 설명 필요</li>
+            <li><strong>빌드 체인</strong> — cross-compiler 정보 제공</li>
+            <li><strong class="em">테스트 우선</strong> — AI가 생성한 코드 반드시 테스트</li>
+        </ul>
+    </div>
+
+    <!-- 78. Appendix Title -->
+    <div class="slide violet">
+        <h1>부록</h1>
+        <p class="sub">자주 묻는 용어 설명</p>
+    </div>
+
+    <!-- 79. What is RAG -->
+    <div class="slide">
+        <h2>RAG가 뭔데?</h2>
+        <div class="quote-box" style="margin-top: 40px;">
+            <p style="font-size: 1.2rem;">모델이 <strong class="em">학습하지 않은 데이터</strong>를<br>넣어주는 모든 것</p>
+        </div>
+        <p class="sub" style="margin-top: 40px; font-size: 1.05rem;">
+            엄밀한 의미: <span class="em">Retrieval</span>-Augmented Generation<br>
+            = <strong>"검색"</strong> 첨부 질문<br><br>
+            <span style="font-size: 0.9rem; opacity: 0.7;">
+            (보통은 임베딩 벡터에 데이터 저장 → 의미 기반 검색 → 프롬프트에 첨부하는 파이프라인을 말함)
+            </span>
+        </p>
+    </div>
+
+    <!-- 80. What is MCP -->
+    <div class="slide surface">
+        <h2>MCP가 뭐야?</h2>
+        <div class="quote-box" style="margin-top: 40px;">
+            <p style="font-size: 1.3rem;"><strong class="em">몰라도 됨</strong></p>
+        </div>
+        <p class="sub" style="margin-top: 32px;">
+            그냥 <strong>"앱"</strong> 정도로 생각하면 됨<br><br>
+            <span style="font-size: 0.95rem;">
+            정확한 의미: 모든 AI Agent가 <span class="em">통일된 프로토콜</span>로 통신하자는 규약<br>
+            JIRA가 REST든 GraphQL이든 상관없듯이, 그냥 통신 방식일 뿐
+            </span>
+        </p>
+        <div class="tip" style="margin-top: 32px;">
+            <p>MCP 만들고 싶으면? → <strong>MCP Builder</strong> 쓰면 AI가 알아서 만들어줌</p>
+        </div>
+    </div>
+
+    <!-- 81. Practice Section -->
+    <div class="slide orange">
+        <h1>실습</h1>
+        <p class="sub">GitHub 오픈소스로 연습하기</p>
+    </div>
+
+    <!-- 84. Practice Idea -->
+    <div class="slide surface">
+        <h3>실습 아이디어</h3>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h4>임베디드 오픈소스 clone</h4>
+                <p>FreeRTOS, Zephyr, ESP-IDF 등</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h4>CLAUDE.md 작성</h4>
+                <p>프로젝트 구조, 빌드 방법, 코딩 컨벤션 정리</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h4>작은 작업부터</h4>
+                <p>"이 함수 설명해줘" → "테스트 추가해줘" → "리팩토링해줘"</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+                <h4>빌드 & 실행 확인</h4>
+                <p>Agent가 수정한 코드가 실제로 동작하는지 검증</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 85. Good Practice Repos -->
+    <div class="slide">
+        <h3>연습하기 좋은 저장소</h3>
+        <ul class="list">
+            <li><strong>FreeRTOS</strong> — RTOS 기본, 구조 명확</li>
+            <li><strong>littlefs</strong> — 임베디드 파일시스템, 작고 명확</li>
+            <li><strong>TinyUSB</strong> — USB 스택, 모듈화 잘됨</li>
+            <li><strong>lvgl</strong> — 임베디드 GUI, 예제 풍부</li>
+        </ul>
+        <p class="sub">작고 구조가 명확한 프로젝트로 시작</p>
+    </div>
+
+    <!-- 86. Security -->
+    <div class="slide surface">
+        <h2>보안 주의사항</h2>
+        <ul class="list">
+            <li><strong class="red">API 키</strong> — 절대 코드에 하드코딩 금지</li>
+            <li><strong class="red">민감 데이터</strong> — 고객 정보, 내부 키 프롬프트 금지</li>
+            <li><strong class="yellow">.gitignore</strong> — .env, 키 파일 제외 확인</li>
+            <li><strong>코드 리뷰</strong> — AI 생성 코드도 반드시 검토</li>
+        </ul>
+    </div>
+
+    <!-- 87. Checklist -->
+    <div class="slide">
+        <h3>시작 전 체크리스트</h3>
+        <ul class="list">
+            <li>☐ 도구 선택 (Claude Code / Cursor / Antigravity)</li>
+            <li>☐ 계정 생성 및 요금제 결제</li>
+            <li>☐ 설치 및 환경 설정</li>
+            <li>☐ CLAUDE.md 또는 .cursorrules 작성</li>
+            <li>☐ 연습용 프로젝트에서 테스트</li>
+            <li>☐ POC 과제에 적용</li>
+        </ul>
+    </div>
+
+    <!-- 88. Resources -->
+    <div class="slide surface">
+        <h3>참고 자료</h3>
+        <ul class="list">
+            <li><strong>Claude Code</strong> — docs.anthropic.com/claude-code</li>
+            <li><strong>Cursor</strong> — cursor.com/docs</li>
+            <li><strong>Antigravity</strong> — developers.google.com/antigravity</li>
+            <li><strong>MCP</strong> — modelcontextprotocol.io</li>
+        </ul>
+    </div>
+
+    <!-- 89. Summary Part 2 -->
+    <div class="slide mint">
+        <h2>Part 2 정리</h2>
+        <ul class="list" style="color: #fff;">
+            <li><strong>Claude Code</strong> — 최강, $100/월 이상 필요</li>
+            <li><strong>Cursor</strong> — 항상 옳은 선택, 안정적</li>
+            <li><strong>Antigravity</strong> — 무료, 지금이 기회</li>
+            <li><strong>CLAUDE.md</strong> — 맥락 파일이 품질 결정</li>
+            <li><strong>파이프라인</strong> — 반복 가능한 워크플로우 구축</li>
+        </ul>
+    </div>
+
+    <!-- 90. Final -->
+    <div class="slide blue">
+        <h1>도구는 도구일 뿐</h1>
+        <p class="sub">결국 중요한 건<br><span class="em">무엇을 만들어야 하는지 아는 것</span></p>
+    </div>
+
+    <!-- 91. QA -->
+    <div class="slide">
+        <h1>Q&A</h1>
+        <p class="sub">이제 직접 설치하고 써봅시다</p>
+        <p class="meta">김학민 · SE P/J</p>
+    </div>
+
+</div>
+
+<div class="page-num"><span id="current">1</span> / <span id="total">92</span></div>
+<div class="nav">
+    <button onclick="prev()">←</button>
+    <button onclick="next()">→</button>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+
+    document.getElementById('total').textContent = total;
+
+    function goTo(index) {
+        if (index < 0) index = 0;
+        if (index >= total) index = total - 1;
+        current = index;
+        document.getElementById('slides').style.transform = `translateX(-${current * 100}vw)`;
+        document.getElementById('current').textContent = current + 1;
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            next();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            prev();
+        }
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) next();
+            else prev();
+        }
+    });
+</script>
+
+</body>
+</html>

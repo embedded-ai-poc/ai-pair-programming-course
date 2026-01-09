@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 AI 트렌드</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0A0A0F;
+            color: #F0F0F5;
+            overflow: hidden;
+        }
+
+        .slides { display: flex; transition: transform 0.5s ease; }
+
+        .slide {
+            min-width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+            background: #0A0A0F;
+        }
+
+        .slide.light { background: #F5F6FA; color: #0A0A0F; }
+        .slide.blue { background: linear-gradient(135deg, #0D1B3E 0%, #1428A0 100%); }
+        .slide.surface { background: #0F1015; }
+
+        h1 {
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -0.01em;
+        }
+
+        .sub {
+            font-size: clamp(1.05rem, 2vw, 1.3rem);
+            color: #8890A0;
+            margin-top: 32px;
+            text-align: center;
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        .slide.light .sub { color: #5A6070; }
+        .slide.blue .sub { color: rgba(255,255,255,0.7); }
+
+        .em { color: #4A8CFF; }
+        .slide.light .em { color: #1428A0; }
+        .slide.blue .em { color: #8AB8FF; }
+
+        .red { color: #F87171; }
+        .yellow { color: #FBBF24; }
+        .green { color: #34D399; }
+
+        .meta {
+            margin-top: 60px;
+            font-size: 0.95rem;
+            color: #4A5060;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        blockquote {
+            font-size: clamp(1.4rem, 3.5vw, 2.1rem);
+            font-weight: 300;
+            max-width: 760px;
+            text-align: center;
+            line-height: 1.7;
+            color: #F0F0F5;
+        }
+
+        cite {
+            display: block;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+            font-style: normal;
+            letter-spacing: 0.05em;
+        }
+
+        .img {
+            width: 100%;
+            max-width: 680px;
+            aspect-ratio: 16/9;
+            background: #12141A;
+            border: 1px solid #252830;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .slide.light .img { background: #EAECF2; border-color: #D0D4E0; }
+
+        .img .label {
+            font-size: 10px;
+            color: #5A6070;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 400;
+        }
+
+        .img .prompt {
+            font-size: 0.9rem;
+            color: #6A7080;
+            text-align: center;
+            line-height: 1.7;
+            max-width: 480px;
+            font-weight: 300;
+        }
+
+        .comp { display: flex; gap: 24px; margin: 48px 0; }
+
+        .comp-item {
+            padding: 40px 48px;
+            text-align: center;
+            background: #12141A;
+            min-width: 200px;
+            border: 1px solid #252830;
+        }
+
+        .slide.light .comp-item { background: #EAECF2; border-color: #D0D4E0; }
+
+        .comp-item.on { background: #1428A0; border-color: #4A8CFF; }
+        .slide.light .comp-item.on { background: #1428A0; border-color: #1428A0; color: #F0F0F5; }
+
+        .comp-item .tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+            color: #5A6070;
+            font-weight: 400;
+        }
+
+        .comp-item.on .tag { color: #8AB8FF; }
+        .comp-item p { font-size: 1.15rem; font-weight: 700; }
+
+        .list { list-style: none; max-width: 620px; width: 100%; }
+
+        .list li {
+            font-size: 1.2rem;
+            padding: 22px 0;
+            border-bottom: 1px solid #252830;
+            color: #A0A8B8;
+            font-weight: 400;
+        }
+
+        .slide.light .list li { border-color: #D0D4E0; color: #5A6070; }
+        .list li:last-child { border-bottom: none; }
+        .list strong { color: #F0F0F5; font-weight: 700; }
+        .slide.light .list strong { color: #0A0A0F; }
+
+        .grid { display: flex; gap: 16px; margin-top: 48px; flex-wrap: wrap; justify-content: center; }
+
+        .grid-item {
+            padding: 28px 32px;
+            text-align: center;
+            background: #12141A;
+            min-width: 150px;
+            border: 1px solid #252830;
+        }
+
+        .slide.light .grid-item { background: #EAECF2; border-color: #D0D4E0; }
+        .grid-item .name { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+        .grid-item .desc { font-size: 0.9rem; color: #6A7080; font-weight: 300; }
+
+        .big {
+            font-size: clamp(7rem, 22vw, 14rem);
+            font-weight: 900;
+            color: #4A8CFF;
+            line-height: 1;
+            opacity: 0.25;
+        }
+
+        .warn {
+            background: #14161A;
+            border-left: 2px solid #F59E0B;
+            padding: 20px 28px;
+            margin-top: 36px;
+            max-width: 520px;
+        }
+
+        .slide.light .warn { background: #FEF3E0; }
+        .warn p { color: #F59E0B; font-size: 1rem; font-weight: 400; }
+
+        .tbl { margin-top: 36px; border-collapse: collapse; }
+
+        .tbl th, .tbl td {
+            padding: 18px 28px;
+            text-align: left;
+            border-bottom: 1px solid #252830;
+        }
+
+        .tbl th { color: #5A6070; font-weight: 400; font-size: 0.85rem; letter-spacing: 0.05em; }
+        .tbl td { font-size: 1.05rem; color: #A0A8B8; }
+
+        .stat { text-align: center; }
+        .stat .number { font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; color: #4A8CFF; line-height: 1; }
+        .stat .label { font-size: 1.1rem; color: #8890A0; margin-top: 16px; font-weight: 300; }
+
+        .two-col { display: flex; gap: 60px; max-width: 1000px; width: 100%; }
+        .two-col .col { flex: 1; }
+        .two-col h3 { text-align: left; margin-bottom: 24px; }
+        .two-col .list li { font-size: 1.05rem; padding: 16px 0; }
+
+        .pipeline { display: flex; align-items: center; gap: 12px; margin: 48px 0; flex-wrap: wrap; justify-content: center; }
+
+        .pipeline-step {
+            padding: 16px 28px;
+            background: #12141A;
+            border: 1px solid #252830;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .pipeline-step.on { background: #1428A0; border-color: #4A8CFF; }
+
+        .pipeline-arrow { color: #4A8CFF; font-size: 1.2rem; }
+
+        .quote-box {
+            background: #12141A;
+            border-left: 3px solid #4A8CFF;
+            padding: 28px 32px;
+            max-width: 600px;
+        }
+
+        .quote-box p { font-size: 1.1rem; line-height: 1.8; font-weight: 300; }
+        .quote-box .author { margin-top: 16px; font-size: 0.9rem; color: #5A6070; }
+
+        .nav {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav button {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #F0F0F5;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.2s;
+        }
+
+        .nav button:hover { background: rgba(255,255,255,0.2); }
+
+        .progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #4A8CFF;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 48px 28px; }
+            .comp { flex-direction: column; }
+            .two-col { flex-direction: column; gap: 40px; }
+            .pipeline { flex-direction: column; }
+            .pipeline-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides">
+        <!-- Slide 1: Cover -->
+        <div class="slide blue">
+            <h1>2026 AI 트렌드</h1>
+            <p class="sub">Hype의 시대를 지나, 실용의 시대로</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">AI Industry Outlook · 2026</p>
+        </div>
+
+        <!-- Slide 2: Section - 핵심 키워드 -->
+        <div class="slide blue">
+            <p class="big">01</p>
+            <h2>2026년 핵심 키워드</h2>
+            <p class="sub">"Show Me the Money"</p>
+        </div>
+
+        <!-- Slide 3: Quote -->
+        <div class="slide">
+            <blockquote>
+                "2026년은 AI의<br><span class="em">'Show Me the Money'</span> 년이다"
+            </blockquote>
+            <cite>— Venky Ganesan · Menlo Ventures</cite>
+        </div>
+
+        <!-- Slide 4: Comparison - Hype vs Pragmatism -->
+        <div class="slide">
+            <h3>패러다임의 전환</h3>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">2024-2025</p>
+                    <p>AI Evangelism<br><span style="font-weight: 300; font-size: 0.9rem; color: #8890A0;">Hype & 기대</span></p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">2026</p>
+                    <p>AI Evaluation<br><span style="font-weight: 300; font-size: 0.9rem; color: #8AB8FF;">검증 & 실용</span></p>
+                </div>
+            </div>
+            <p class="sub">Stanford AI 전문가들: "AI 전도의 시대에서 AI 평가의 시대로"</p>
+        </div>
+
+        <!-- Slide 5: Statistics -->
+        <div class="slide">
+            <div class="stat">
+                <p class="number">ROI</p>
+                <p class="label">기업들이 AI 투자에서 실질적 수익을 요구하는 해</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Section - AI Agents -->
+        <div class="slide blue">
+            <p class="big">02</p>
+            <h2>AI 에이전트</h2>
+            <p class="sub">가장 주목받는 기술, 그러나...</p>
+        </div>
+
+        <!-- Slide 7: Agent Reality -->
+        <div class="slide">
+            <h3>AI 에이전트: 기대 vs 현실</h3>
+            <div class="quote-box">
+                <p>"에이전트는 생성형 AI 이후 가장 큰 Hype였다.<br>GenAI가 Gartner의 환멸의 골짜기에 있는 것처럼,<br>에이전트도 2026년에 그곳으로 향할 것이다."</p>
+                <div class="author">— Gartner 예측</div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Agent Hope -->
+        <div class="slide light">
+            <h3>그러나 빛나는 가능성</h3>
+            <ul class="list">
+                <li><strong class="em">집중된 구현</strong> — 범용이 아닌 특화된 에이전트</li>
+                <li><strong>중앙집중식 관리</strong> — 기업 차원의 체계적 배포</li>
+                <li><strong>실제 벤치마크</strong> — 실무 기반 성능 측정</li>
+            </ul>
+            <p class="sub">올바른 방법을 아는 기업에게 2026년은 에이전트가 빛나는 해</p>
+        </div>
+
+        <!-- Slide 9: Section - Physical AI -->
+        <div class="slide blue">
+            <p class="big">03</p>
+            <h2>Physical AI의 부상</h2>
+            <p class="sub">로보틱스와 월드 모델</p>
+        </div>
+
+        <!-- Slide 10: Physical AI -->
+        <div class="slide">
+            <h3>LLM 스케일링의 한계</h3>
+            <div class="img">
+                <span class="label">Image Prompt</span>
+                <p class="prompt">Minimalist isometric illustration. Humanoid robot interacting with physical objects. Blue accent on dark background. Clean futuristic aesthetic.</p>
+            </div>
+            <p class="sub">IBM Peter Staar: "로보틱스와 Physical AI가 확실히 부상할 것"</p>
+        </div>
+
+        <!-- Slide 11: World Models -->
+        <div class="slide surface">
+            <h3>월드 모델 (World Models)</h3>
+            <ul class="list">
+                <li><strong>3D 공간</strong>에서 사물이 움직이고 상호작용하는 방식 학습</li>
+                <li><strong class="em">Yann LeCun</strong> — Meta 퇴사, 월드 모델 스타트업 창업</li>
+                <li><strong>$5B</strong> 밸류에이션 목표</li>
+            </ul>
+        </div>
+
+        <!-- Slide 12: Section - AI in Science -->
+        <div class="slide blue">
+            <p class="big">04</p>
+            <h2>과학 발견의 AI</h2>
+            <p class="sub">논문 요약을 넘어서</p>
+        </div>
+
+        <!-- Slide 13: Scientific AI -->
+        <div class="slide">
+            <h3>AI의 과학적 역할 진화</h3>
+            <div class="pipeline">
+                <div class="pipeline-step">가설 생성</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">실험 통제</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">협업 연구</div>
+            </div>
+            <p class="sub">Microsoft Research Peter Lee:<br>"AI가 물리학, 화학, 생물학 발견 과정에 직접 참여"</p>
+        </div>
+
+        <!-- Slide 14: Section - Risks -->
+        <div class="slide blue">
+            <p class="big">05</p>
+            <h2>주요 리스크</h2>
+            <p class="sub">버블, 규제, 지정학</p>
+        </div>
+
+        <!-- Slide 15: AI Bubble -->
+        <div class="slide">
+            <h2>AI 버블 논쟁</h2>
+            <div class="warn">
+                <p>버블이 있는가? 언제 터지는가?<br>자금이 빠르게 빠질 것인가, 서서히 빠질 것인가?</p>
+            </div>
+            <p class="sub">2026년 AI 업계의 가장 큰 의문</p>
+        </div>
+
+        <!-- Slide 16: Geopolitics -->
+        <div class="slide light">
+            <h3>지정학적 변화</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">중국의 부상</p>
+                    <p class="desc">오픈소스 전략으로<br>글로벌 신뢰 확보</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">AI 주권</p>
+                    <p class="desc">각국의 AI 독립<br>움직임 가속화</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name red">규제 전쟁</p>
+                    <p class="desc">연방 vs 주정부<br>치열한 로비전</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Synthetic Media -->
+        <div class="slide">
+            <h3>합성 미디어의 도전</h3>
+            <div class="quote-box">
+                <p>"텍스트 기반 허위정보에서<br><span class="em">고품질 합성 미디어</span>로의 전환이<br>2026년 거버넌스의 핵심 과제가 될 것"</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Summary -->
+        <div class="slide surface">
+            <h3>2026 AI 트렌드 요약</h3>
+            <table class="tbl">
+                <tr><th>영역</th><th>핵심 변화</th></tr>
+                <tr><td><strong>투자</strong></td><td>Hype → ROI 실증</td></tr>
+                <tr><td><strong>기술</strong></td><td>LLM 스케일링 → Physical AI</td></tr>
+                <tr><td><strong>에이전트</strong></td><td>범용 → 특화 구현</td></tr>
+                <tr><td><strong>과학</strong></td><td>보조 → 발견 참여</td></tr>
+                <tr><td><strong>지정학</strong></td><td>미국 독점 → 다극화</td></tr>
+            </table>
+        </div>
+
+        <!-- Slide 19: Closing -->
+        <div class="slide blue">
+            <h1>감사합니다</h1>
+            <p class="sub">AI의 실용 시대가 시작됩니다</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">Sources: MIT Tech Review · IBM · Stanford HAI · PwC · Microsoft</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="prev()">←</button>
+        <button onclick="next()">→</button>
+    </div>
+    <div class="progress" id="progress"></div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+
+        function go(n) {
+            current = Math.max(0, Math.min(n, total - 1));
+            document.querySelector('.slides').style.transform = `translateX(-${current * 100}vw)`;
+            document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+        }
+
+        function next() { go(current + 1); }
+        function prev() { go(current - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') next();
+            if (e.key === 'ArrowLeft') prev();
+        });
+
+        go(0);
+    </script>
+</body>
+</html>

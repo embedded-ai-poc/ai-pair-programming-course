@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 페어프로그래밍 워크샵 - Context Engineering부터 Agentic Workflow까지</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0A0A0F;
+            color: #F0F0F5;
+            overflow: hidden;
+        }
+
+        .slides {
+            display: flex;
+        }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5vh 6vw;
+            background: #0A0A0F;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .slide>* {
+            flex-shrink: 0;
+        }
+
+        .slide.light {
+            background: #F5F6FA;
+            color: #0A0A0F;
+        }
+
+        .slide.blue {
+            background: #0F172A;
+            /* Slate 900 */
+        }
+
+        .slide.surface {
+            background: #18181B;
+            /* Zinc 900 */
+        }
+
+        .slide.mint {
+            background: #064E3B;
+            /* Emerald 900 */
+        }
+
+        .slide.orange {
+            background: #7C2D12;
+            /* Orange 900 */
+        }
+
+        .slide.violet {
+            background: #4C1D95;
+            /* Violet 900 */
+        }
+
+        .slide.rose {
+            background: #881337;
+            /* Rose 900 */
+        }
+
+        .slide.cyan {
+            background: #164E63;
+            /* Cyan 900 */
+        }
+
+        .slide.indigo {
+            background: #312E81;
+            /* Indigo 900 */
+        }
+
+        .slide.amber {
+            background: #78350F;
+            /* Amber 900 */
+        }
+
+        .slide.mint .sub,
+        .slide.orange .sub,
+        .slide.violet .sub,
+        .slide.blue .sub,
+        .slide.rose .sub,
+        .slide.cyan .sub,
+        .slide.indigo .sub,
+        .slide.amber .sub {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .slide.mint .em {
+            color: #6EE7B7;
+        }
+
+        .slide.orange .em {
+            color: #FED7AA;
+        }
+
+        .slide.violet .em {
+            color: #C4B5FD;
+        }
+
+        .slide.blue .em {
+            color: #8AB8FF;
+        }
+
+        .slide.rose .em {
+            color: #FDA4AF;
+        }
+
+        .slide.cyan .em {
+            color: #67E8F9;
+        }
+
+        .slide.indigo .em {
+            color: #A5B4FC;
+        }
+
+        .slide.amber .em {
+            color: #FDE68A;
+        }
+
+        .slide.light .sub {
+            color: #3A4558;
+        }
+
+        .slide.light .em {
+            color: #1428A0;
+        }
+
+        h1 {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(3.2rem, 5vw, 4.5rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3vh;
+            letter-spacing: -0.01em;
+        }
+
+        .sub {
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            color: #D0D8E8;
+            margin-top: 2.5vh;
+            text-align: center;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .em {
+            color: #5A9CFF;
+        }
+
+        .red {
+            color: #FF8080;
+        }
+
+        .green {
+            color: #34D399;
+        }
+
+        .yellow {
+            color: #FCD34D;
+        }
+
+        .meta {
+            margin-top: 4vh;
+            font-size: 1.6rem;
+            color: #6A7080;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        .comp {
+            display: flex;
+            gap: 24px;
+            margin: 2.5vh 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .comp-item {
+            padding: 44px 52px;
+            text-align: center;
+            background: #18181B;
+            min-width: 220px;
+            border: 1px solid #3F3F46;
+            border-radius: 4px;
+        }
+
+        .comp-item.on {
+            background: #1428A0;
+            border-color: #4A8CFF;
+        }
+
+        .comp-item.green-on {
+            background: #064E3B;
+            border-color: #10B981;
+        }
+
+        .comp-item.yellow-on {
+            background: #713F12;
+            border-color: #F59E0B;
+        }
+
+        .comp-item.red-on {
+            background: #7F1D1D;
+            border-color: #EF4444;
+        }
+
+        .comp-item .tag {
+            font-size: clamp(1.2rem, 1.4vw, 1.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5vh;
+            color: #8A9098;
+        }
+
+        .comp-item.on .tag,
+        .comp-item.green-on .tag,
+        .comp-item.yellow-on .tag,
+        .comp-item.red-on .tag {
+            color: #C0D0E0;
+        }
+
+        .comp-item p {
+            font-size: clamp(1.6rem, 2vw, 2rem);
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .list {
+            list-style: none;
+            max-width: 85vw;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .list li {
+            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+            padding: 1.8vh 0;
+            border-bottom: 2px solid #505560;
+            color: #E0E8F0;
+            font-weight: 400;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .list li:last-child {
+            border-bottom: none;
+        }
+
+        .list strong {
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: flex;
+            gap: 20px;
+            margin-top: 2.5vh;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .grid-item {
+            padding: 36px 44px;
+            text-align: center;
+            background: #18181B;
+            min-width: 200px;
+            border: 1px solid #3F3F46;
+            border-radius: 4px;
+        }
+
+        .grid-item .name {
+            font-size: clamp(1.6rem, 2vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .grid-item .desc {
+            font-size: clamp(1.4rem, 1.6vw, 1.7rem);
+            color: #A0A8B8;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .code {
+            background: #18181B;
+            border: 1px solid #3F3F46;
+            padding: 2.5vh 3vw;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: clamp(1.3rem, 1.5vw, 1.6rem);
+            line-height: 1.7;
+            max-width: 90vw;
+            width: 94%;
+            margin: 2vh 0;
+            white-space: pre-wrap;
+            color: #E0E8F0;
+            text-align: left;
+            border-radius: 4px;
+            max-height: 55vh;
+            overflow-y: auto;
+        }
+
+        .code .comment {
+            color: #7A8090;
+        }
+
+        .code .keyword {
+            color: #D4C5FF;
+        }
+
+        .code .string {
+            color: #7EF7C7;
+        }
+
+        .quote-box {
+            background: #12141A;
+            border-left: 5px solid #5A9CFF;
+            padding: 2.5vh 3vw;
+            margin: 2vh 0;
+            max-width: 85vw;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .quote-box p {
+            font-size: clamp(1.6rem, 2vw, 2rem);
+            color: #D0D8E8;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .warn {
+            background: #14161A;
+            border-left: 4px solid #FBBF24;
+            padding: 2vh 3vw;
+            margin-top: 2.5vh;
+            max-width: 85vw;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .warn p {
+            color: #FCD34D;
+            font-size: clamp(1.5rem, 1.8vw, 1.8rem);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .tip {
+            background: #14161A;
+            border-left: 4px solid #34D399;
+            padding: 2vh 3vw;
+            margin-top: 2.5vh;
+            max-width: 85vw;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .tip p {
+            color: #34D399;
+            font-size: clamp(1.5rem, 1.8vw, 1.8rem);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 2.5vh 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pipeline-step {
+            background: #18181B;
+            border: 1px solid #52525B;
+            padding: 1.8vh 2vw;
+            font-size: clamp(1.3rem, 1.6vw, 1.7rem);
+            font-weight: 600;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .pipeline-step.on {
+            background: #1428A0;
+            border-color: #5A9CFF;
+        }
+
+        .pipeline-step.green {
+            background: #064E3B;
+            border-color: #10B981;
+        }
+
+        .pipeline-step.red {
+            background: #7F1D1D;
+            border-color: #EF4444;
+        }
+
+        .pipeline-arrow {
+            color: #5A6070;
+            font-size: clamp(1.4rem, 1.8vw, 1.8rem);
+        }
+
+        .tbl {
+            margin-top: 2.5vh;
+            border-collapse: collapse;
+        }
+
+        .tbl th,
+        .tbl td {
+            padding: 1.5vh 2.5vw;
+            text-align: left;
+            border-bottom: 2px solid #353840;
+        }
+
+        .tbl th {
+            color: #A0A8B8;
+            font-weight: 500;
+            font-size: clamp(1.4rem, 1.6vw, 1.7rem);
+            letter-spacing: 0.05em;
+        }
+
+        .tbl td {
+            font-size: clamp(1.5rem, 1.8vw, 1.9rem);
+            color: #D0D8E8;
+        }
+
+
+        .nav {
+            position: fixed;
+            bottom: 32px;
+            left: 48px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav button {
+            width: 56px;
+            height: 56px;
+            background: transparent;
+            border: 2px solid #353840;
+            color: #7A8090;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .nav button:hover {
+            border-color: #5A9CFF;
+            color: #5A9CFF;
+        }
+
+        .part-label {
+            position: fixed;
+            top: 32px;
+            left: 48px;
+            font-size: 1.1rem;
+            color: #5A6070;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 32px 28px 72px 28px;
+            }
+
+            .comp {
+                flex-direction: column;
+                gap: 14px;
+            }
+
+            .comp-item {
+                min-width: auto;
+                padding: 32px 28px;
+            }
+
+            .grid {
+                flex-direction: column;
+            }
+
+            .nav {
+                left: 24px;
+                bottom: 24px;
+            }
+
+
+            .pipeline {
+                gap: 10px;
+            }
+
+            .pipeline-step {
+                padding: 14px 18px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="part-label">AI 페어프로그래밍 워크샵</div>
+
+    <div class="slides" id="slides">
+
+        <!-- ==================== 커버 ==================== -->
+
+        <!-- 01. Cover -->
+        <div class="slide blue">
+            <h1>AI 페어프로그래밍<br>워크샵</h1>
+            <p class="sub">Context Engineering부터 Agentic Workflow까지</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">김학민 · SE P/J · 2026.1</p>
+        </div>
+
+        <!-- 02. 어제 리캡 -->
+        <div class="slide surface">
+            <h2>어제 리캡</h2>
+            <ul class="list">
+                <li><strong class="em">고민을 아웃소싱</strong> — 생각 자체를 AI와 나누기</li>
+                <li><strong>마스터셰프</strong> — 직접 요리 ✗, 주방 지휘 ✓</li>
+                <li><strong>Model × Harness × Pilot</strong> — 세 요소의 균형</li>
+                <li><strong>Agent 체험</strong> — 시켜놓고 지켜보기</li>
+            </ul>
+        </div>
+
+        <!-- 02-1. 마인드셋 전환: A to Z 탈피 -->
+        <div class="slide rose">
+            <h1>A to Z 학습<br><span class="em">재고해봅시다</span></h1>
+            <p class="sub">기초→중급→고급 순서 학습<br>AI 시대에는 <span class="em">다른 접근이 필요할 수 있습니다</span></p>
+        </div>
+
+        <!-- 02-2. 학습 패러다임 전환 -->
+        <div class="slide surface">
+            <h3>학습 패러다임의 전환</h3>
+            <div class="comp">
+                <div class="comp-item red-on">
+                    <p class="tag">기존 방식</p>
+                    <p style="font-size:1.7rem">기초 → 중급 → 고급<br>체계적으로, 오래 걸림<br>다 배우면 세상이 바뀜</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">새로운 방식</p>
+                    <p style="font-size:1.7rem">문제 → AI에게 질문<br>모르면 더 깊이 파기<br>필요한 것만 즉시 학습</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 02-3. Recursive Gap Filling -->
+        <div class="slide">
+            <h2>Recursive Gap Filling</h2>
+            <p class="sub" style="margin-bottom: 40px;">재귀적 틈새 메우기</p>
+            <ul class="list">
+                <li><strong>1.</strong> 실제 문제를 먼저 접한다</li>
+                <li><strong>2.</strong> AI에게 해결 방법을 묻는다</li>
+                <li><strong>3.</strong> 이해 안 되면 <span class="em">"12살에게 설명하듯이"</span> 다시 묻는다</li>
+                <li><strong>4.</strong> 반복하다 보면 <strong>전체 구조가 보인다</strong></li>
+            </ul>
+        </div>
+
+        <!-- 02-4. 핵심 메시지 -->
+        <div class="slide surface">
+            <h2>무엇을 만들어야<br>하는지 아는 것이<br><span class="em">중요합니다</span></h2>
+            <p class="sub">코딩 실력만큼이나<br>문제 정의와 검증 능력이 핵심이 됩니다</p>
+        </div>
+
+        <!-- 03. 환경 점검 -->
+        <div class="slide">
+            <h3>환경 점검 체크리스트</h3>
+            <ul class="list">
+                <li><strong class="green">Claude Code</strong> — <code>claude --version</code> 확인</li>
+                <li><strong class="green">프로젝트 폴더</strong> — 실습용 프로젝트 준비</li>
+                <li><strong class="green">Git</strong> — 버전 관리 가능 여부</li>
+                <li><strong class="yellow">CLAUDE.md</strong> — 오늘 작성 예정</li>
+            </ul>
+            <div class="tip">
+                <p>문제가 있으면 지금 손 들어주세요!</p>
+            </div>
+        </div>
+
+        <!-- 04. Today's Goal -->
+        <div class="slide surface">
+            <h2>오늘의 목표</h2>
+            <p class="sub" style="font-size: 2.4rem;">
+                <span class="em">맥락을 잘 줘야 결과가 좋다</span>
+            </p>
+            <p class="sub" style="margin-top: 48px; font-size: 2rem;">
+                CLAUDE.md 작성 능력 확보<br>
+                반복 가능한 파이프라인 설계<br>
+                공식 플러그인 메커니즘 이해<br>
+                Agent SDK 기초
+            </p>
+        </div>
+
+        <!-- 04-1. Today's Roadmap -->
+        <div class="slide">
+            <h2>오늘의 로드맵</h2>
+            <div class="grid" style="max-width: 90vw;">
+                <div class="grid-item" style="background: #4C1D95;">
+                    <p class="name">Part 1-2</p>
+                    <p class="desc">Context Engineering<br>CLAUDE.md & Rule-Growing</p>
+                </div>
+                <div class="grid-item" style="background: #7C2D12;">
+                    <p class="name">Part 3-4</p>
+                    <p class="desc">파이프라인 설계<br>TDD 실습</p>
+                </div>
+                <div class="grid-item" style="background: #312E81;">
+                    <p class="name">Part 5-6</p>
+                    <p class="desc">Hooks & MCP<br>외부 도구 연결</p>
+                </div>
+                <div class="grid-item" style="background: #064E3B;">
+                    <p class="name">Part 7-8</p>
+                    <p class="desc">Multi-Agent<br>공식 플러그인 4종</p>
+                </div>
+                <div class="grid-item" style="background: #78350F;">
+                    <p class="name">Part 9</p>
+                    <p class="desc">Agent SDK<br>프로그래밍 방식</p>
+                </div>
+                <div class="grid-item" style="background: #881337;">
+                    <p class="name">Part 10</p>
+                    <p class="desc">실습 프로젝트<br>포모도로 타이머</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 04-2. Learning Flow -->
+        <div class="slide surface">
+            <h3>오늘의 학습 흐름</h3>
+            <div class="pipeline">
+                <div class="pipeline-step">맥락 설정</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">파이프라인</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">확장 도구</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">실습</div>
+            </div>
+            <p class="sub" style="margin-top: 4vh;">
+                이론 → 개념 → 메커니즘 → <span class="em">직접 해보기</span><br>
+                마지막에 포모도로 타이머 프로젝트로 실습합니다
+            </p>
+        </div>
+
+        <!-- 05. Context Engineering Image -->
+        <div class="slide">
+            <img src="day2-context-cover.png" alt="Context Engineering"
+                style="max-width: 35vw; max-height: 40vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <p class="sub">AI에게 완벽한 맥락을 제공하는 컨텍스트 엔지니어링</p>
+        </div>
+
+        <!-- 06. Section Title -->
+        <div class="slide violet">
+            <h1>Context<br>Engineering</h1>
+            <p class="sub">같은 AI, 같은 요청이라도<br><span class="em">맥락</span>에 따라 결과가 완전히 다름</p>
+        </div>
+
+        <!-- 07. Context Comparison -->
+        <div class="slide surface">
+            <h3>맥락의 차이</h3>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">맥락 없이</p>
+                    <p style="font-size:1.6rem">"페이지 매핑 테이블<br>구조체 만들어줘"</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">맥락 제공</p>
+                    <p style="font-size:1.6rem">"HIL 모듈용, 4KB 페이지,<br>2TB 지원, MISRA C 2012,<br>ftl_types.h 호환"</p>
+                </div>
+            </div>
+            <p class="sub">결과물의 품질이 완전히 달라집니다</p>
+        </div>
+
+        <!-- 08. Context Sources -->
+        <div class="slide">
+            <h3>Context의 출처</h3>
+            <img src="context-sources.png" alt="Context Sources"
+                style="max-width: 32vw; max-height: 32vh; margin-bottom: 2vh; border-radius: 8px;">
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">CLAUDE.md</p>
+                    <p class="desc">프로젝트 레벨</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">대화 히스토리</p>
+                    <p class="desc">세션 레벨</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">파일 참조</p>
+                    <p class="desc">요청 레벨</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">MCP</p>
+                    <p class="desc">외부 도구</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 09. CLAUDE.md Intro -->
+        <div class="slide mint">
+            <h1>CLAUDE.md</h1>
+            <p class="sub">프로젝트의 <span class="em">맥락</span>을 알려주는 파일<br><br>이것 하나로 AI 출력 품질이 완전히 달라짐</p>
+        </div>
+
+        <!-- 10. CLAUDE.md vs cursorrules -->
+        <div class="slide surface">
+            <h3>CLAUDE.md vs .cursorrules</h3>
+            <div class="comp">
+                <div class="comp-item on">
+                    <p class="tag">Claude Code</p>
+                    <p>CLAUDE.md</p>
+                </div>
+                <div class="comp-item">
+                    <p class="tag">Cursor</p>
+                    <p>.cursorrules</p>
+                </div>
+            </div>
+            <p class="sub">역할은 동일 — 프로젝트 맥락 제공<br>도구에 따라 파일명만 다름</p>
+        </div>
+
+        <!-- 11. CLAUDE.md Structure -->
+        <div class="slide">
+            <h3>CLAUDE.md 필수 섹션</h3>
+            <ul class="list">
+                <li><strong>프로젝트 개요</strong> — 이 프로젝트가 뭔지</li>
+                <li><strong>코딩 컨벤션</strong> — 따라야 할 스타일 가이드</li>
+                <li><strong>빌드 & 테스트</strong> — 빌드/테스트 명령어</li>
+                <li><strong class="red">절대 금지</strong> — 하면 안 되는 것들</li>
+                <li><strong class="green">필수 사항</strong> — 반드시 해야 하는 것들</li>
+            </ul>
+        </div>
+
+        <!-- 12. CLAUDE.md Example -->
+        <div class="slide surface">
+            <h3>CLAUDE.md 예시 (SSD FW)</h3>
+            <img src="security-warning-2d.png" alt="Security Warning"
+                style="max-width: 30vw; max-height: 30vh; margin-bottom: 2vh; border-radius: 8px;">
+            <div class="code"><span class="keyword"># Project: SSD FW GC Module</span>
+
+<span class="keyword">## 코딩 컨벤션</span>
+- MISRA C 2012 준수
+- 함수명: snake_case / 매크로: UPPER_SNAKE_CASE
+- 들여쓰기: 4 spaces (탭 금지)
+
+<span class="keyword">## 빌드 & 테스트</span>
+make -j8 TARGET=release
+make test SUITE=gc_unit
+
+<span class="keyword">## 절대 금지</span>
+- 동적 메모리 할당 (malloc/free) ❌
+- 전역 변수 남용 ❌</div>
+        </div>
+
+        <!-- 13. CLAUDE.md Example 2 -->
+        <div class="slide">
+            <h3>CLAUDE.md 예시 (계속)</h3>
+            <div class="code"><span class="keyword">## 필수</span>
+- 모든 함수에 Doxygen 주석
+- 에러 핸들링 명시적으로
+- 모든 변경에 대해 테스트 추가
+
+<span class="keyword">## 아키텍처</span>
+- HIL: Host Interface Layer
+- FIL: Flash Interface Layer
+- FTL: Flash Translation Layer
+- GC는 FTL 하위 모듈
+
+<span class="keyword">## 참고 파일</span>
+- /docs/coding_rule.md
+- /docs/architecture.md</div>
+        </div>
+
+        <!-- 14. Good vs Bad -->
+        <div class="slide surface">
+            <h3>좋은 예시 vs 나쁜 예시</h3>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">나쁜 예시</p>
+                    <p style="font-size:1.6rem">"깔끔하게 짜줘"<br>"좋은 코드로"<br>"잘 해줘"</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">좋은 예시</p>
+                    <p style="font-size:1.5rem">MISRA C 2012 준수<br>함수당 50줄 이내<br>cyclomatic complexity ≤10</p>
+                </div>
+            </div>
+            <p class="sub">구체적이고 측정 가능한 기준을 제시</p>
+        </div>
+
+        <!-- 15. Practice CLAUDE.md -->
+        <div class="slide orange">
+            <h1>실습</h1>
+            <p class="sub">우리 프로젝트용 CLAUDE.md 작성하기</p>
+        </div>
+
+        <!-- 16. Practice Guide -->
+        <div class="slide surface">
+            <h3>CLAUDE.md 작성 실습</h3>
+            <ul class="list">
+                <li><strong>Step 1</strong> — 담당 모듈의 특성 정리</li>
+                <li><strong>Step 2</strong> — 코딩 컨벤션 명시</li>
+                <li><strong>Step 3</strong> — 빌드/테스트 명령어 정리</li>
+                <li><strong>Step 4</strong> — 절대 금지 사항 목록화</li>
+                <li><strong>Step 5</strong> — 팀원과 리뷰 & 피드백</li>
+            </ul>
+        </div>
+
+        <!-- ==================== Part 2: Rule-Growing Development ==================== -->
+
+        <!-- 17. Section Title -->
+        <div class="slide mint">
+            <h1>Rule-Growing<br>Development</h1>
+            <p class="sub">코드와 룰이 함께 자라난다</p>
+        </div>
+
+        <!-- 18. Concept -->
+        <div class="slide surface">
+            <h2>Rule-Growing이란</h2>
+            <img src="rule-growing.png" alt="Rule Growing"
+                style="max-width: 35vw; max-height: 35vh; margin: 2vh 0; border-radius: 8px;">
+            <div class="pipeline">
+                <div class="pipeline-step">AI한테 시키기</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">이상한 짓 관찰</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">룰 추가</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">검증</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">배포</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">반복</div>
+            </div>
+            <p class="sub">CLAUDE.md가 점점 정교해집니다</p>
+        </div>
+
+        <!-- 19. Example -->
+        <div class="slide">
+            <h3>Rule-Growing 실제 사례</h3>
+            <div class="code"><span class="comment"># 문제 발견</span>
+AI가 계속 printf로 디버깅 로그를 넣음
+→ 우리 프로젝트는 LOG_DEBUG 매크로 사용
+
+<span class="comment"># CLAUDE.md에 추가</span>
+## 절대 금지
+- printf 직접 사용 ❌ (LOG_DEBUG 매크로 사용)
+
+<span class="comment"># 결과</span>
+이후 AI는 LOG_DEBUG 매크로만 사용</div>
+        </div>
+
+        <!-- 20. Version Control -->
+        <div class="slide surface">
+            <h2>CLAUDE.md 버전 관리</h2>
+            <ul class="list">
+                <li><strong>Git으로 관리</strong> — 변경 이력 추적</li>
+                <li><strong>팀 레포에 공유</strong> — 팀원 모두 동일한 맥락</li>
+                <li><strong>PR 리뷰</strong> — 룰 추가/수정도 리뷰 대상</li>
+                <li><strong>지속적 개선</strong> — 발견할 때마다 업데이트</li>
+            </ul>
+        </div>
+
+        <!-- 21. Evolution -->
+        <div class="slide">
+            <h3>CLAUDE.md 진화 예시</h3>
+            <div class="code"><span class="keyword">v1.0</span> (초기)
+- MISRA C 준수
+- 탭 금지
+
+<span class="keyword">v1.1</span> (1주 후)
+- printf 금지 → LOG_DEBUG 사용
+- 함수당 50줄 이내
+
+<span class="keyword">v1.2</span> (2주 후)
+- assert 대신 ERROR_CHECK 매크로
+- 모든 포인터 NULL 체크 필수</div>
+        </div>
+
+        <!-- 22. Team Collaboration -->
+        <div class="slide surface">
+            <h3>팀 협업: CLAUDE.md 전략</h3>
+            <ul class="list">
+                <li><strong>루트 CLAUDE.md</strong> — 프로젝트 공통 규칙</li>
+                <li><strong>모듈별 CLAUDE.md</strong> — 각 모듈 특화 규칙</li>
+                <li><strong>~/.claude/CLAUDE.md</strong> — 개인 선호 설정</li>
+            </ul>
+            <div class="tip">
+                <p>Claude는 모든 경로의 CLAUDE.md를 자동으로 읽어서 합칩니다</p>
+            </div>
+        </div>
+
+        <!-- 23. Part 1 Summary -->
+        <div class="slide">
+            <h2>Part 1 핵심 정리</h2>
+            <ul class="list">
+                <li><strong class="em">Context Engineering</strong> — 맥락이 품질을 결정</li>
+                <li><strong>CLAUDE.md</strong> — 프로젝트 맥락 파일 작성</li>
+                <li><strong>Rule-Growing</strong> — 코드와 룰이 함께 진화</li>
+                <li><strong>팀 협업</strong> — Git으로 CLAUDE.md 공유</li>
+            </ul>
+        </div>
+
+        <!-- ==================== Part 3: 파이프라인 설계 ==================== -->
+
+        <!-- 25. Cover -->
+        <div class="slide violet">
+            <h1>파이프라인<br>설계</h1>
+            <p class="sub">반복 가능한 워크플로우 구축</p>
+        </div>
+
+        <!-- 26. Pipeline Concept -->
+        <div class="slide surface">
+            <h2>파이프라인을 구축하자</h2>
+            <img src="loopback-workflow.png" alt="Loopback Workflow"
+                style="max-width: 35vw; max-height: 35vh; margin: 2vh 0; border-radius: 8px;">
+            <div class="pipeline">
+                <div class="pipeline-step">요구사항 분석</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">PRD 작성</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">TDD 개발</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">코드 리뷰</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">검증</div>
+            </div>
+            <p class="sub">각 단계에 AI 역할을 부여</p>
+        </div>
+
+        <!-- 27. Pipeline Image -->
+        <div class="slide">
+            <img src="day2-pipeline-cover.png" alt="AI Pipeline & TDD"
+                style="max-width: 35vw; max-height: 40vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <p class="sub">자동화된 검증과 피드백 루프: AI 파이프라인</p>
+        </div>
+
+        <!-- 28. Why Pipeline -->
+        <div class="slide surface">
+            <h3>왜 파이프라인인가</h3>
+            <ul class="list">
+                <li><strong>반복 가능</strong> — 매번 같은 품질 보장</li>
+                <li><strong>검증 포인트</strong> — 각 단계에서 확인</li>
+                <li><strong>실패 시 복구</strong> — 어디서 문제인지 명확</li>
+                <li><strong class="em">자동화 가능</strong> — 워크플로우로 패키징</li>
+            </ul>
+        </div>
+
+        <!-- 29. Role Assignment -->
+        <div class="slide">
+            <h3>AI에게 역할 부여하기</h3>
+            <div class="code"><span class="string">"너는 시니어 요구사항 분석가야. 스펙의 핵심을 정리해줘."</span>
+
+<span class="string">"너는 PRD 작성 전문가야. 요구사항 기반으로 문서 작성해줘."</span>
+
+<span class="string">"너는 TDD의 달인이야. 테스트 먼저 작성하고 구현해줘."</span>
+
+<span class="string">"너는 코드리뷰의 화신이야. MISRA C 기준으로 검토해줘."</span></div>
+            <p class="sub">같은 AI도 역할에 따라 다른 관점으로 작업</p>
+        </div>
+
+        <!-- 30. Multi-Agent Concept -->
+        <div class="slide surface">
+            <h2>Multi-Agent 패턴</h2>
+            <p class="sub" style="margin-bottom: 32px;">하나의 AI가 아니라 여러 역할로 분리</p>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">분석가</p>
+                    <p class="desc">요구사항 추출</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">설계자</p>
+                    <p class="desc">아키텍처 설계</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">개발자</p>
+                    <p class="desc">코드 구현</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name red">검증자</p>
+                    <p class="desc">품질 검사</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 31. Loopback -->
+        <div class="slide">
+            <h2>루프백 워크플로우</h2>
+            <p class="sub" style="margin-bottom: 32px;">실패하면 앞으로 돌아가기</p>
+            <div class="code">"요구사항 분석 → PRD 문서 생성 → TDD 개발 → 테스트 → 코드리뷰
+
+                이 파이프라인이 <span class="string">루프백 방식</span>으로 동작하도록 해줘.
+                테스트 실패하면 TDD로 돌아가고,
+                코드리뷰에서 문제 발견되면 해당 단계로 돌아가게."</div>
+        </div>
+
+        <!-- 32. Loopback Diagram -->
+        <div class="slide surface">
+            <h3>루프백 흐름도</h3>
+            <img src="loopback-workflow.png" alt="Loopback Workflow"
+                style="max-width: 32vw; max-height: 32vh; margin: 2vh 0; border-radius: 8px;">
+            <p class="sub">무한 루프 방지를 위해 최대 반복 횟수 설정 권장</p>
+        </div>
+
+        <!-- 33. Max Loop -->
+        <div class="slide">
+            <h3>무한 루프 방지</h3>
+            <div class="code"><span class="comment"># 프롬프트 예시</span>
+"루프백으로 동작하되, 각 단계 <span class="keyword">최대 3회</span>까지만 재시도해.
+3회 넘어가면 사람에게 에스컬레이션해."
+
+<span class="comment"># 구현 방식</span>
+- max_retry: 3
+- on_max_retry: "escalate_to_human"</div>
+            <div class="warn">
+                <p>무한 루프 방지 없이 자동화하면 토큰비 폭탄</p>
+            </div>
+        </div>
+
+        <!-- 34. Tools Integration -->
+        <div class="slide surface">
+            <h3>파이프라인에 도구 연결</h3>
+            <div class="code"><span class="comment"># 요구사항 분석 단계</span>
+"Context7 MCP를 활용해서 라이브러리 문서 참조해"
+"스펙 문서 /docs/spec_v2.md 를 확인해"
+
+<span class="comment"># TDD 개발 단계</span>
+"TDD에 대해서 1분 이상 고민하고 시작해"
+"우리 회사 코드 컨벤션 /docs/coding_rule.md 참조해"
+
+<span class="comment"># 코드 리뷰 단계</span>
+"MISRA C 2012 기준으로 검토해"
+"보안 취약점 위주로 확인해"</div>
+        </div>
+
+        <!-- 35. Verification Phase -->
+        <div class="slide">
+            <h3>검증 단계의 중요성</h3>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">검증 없음</p>
+                    <p style="font-size:1.6rem">AI가 "완료"라고 하면<br>그대로 믿음</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">검증 있음</p>
+                    <p style="font-size:1.5rem">요구사항 매칭 체크<br>테스트 커버리지 확인<br>코드 품질 검사</p>
+                </div>
+            </div>
+            <p class="sub">검증 없는 자동화는 자동화된 버그 생산</p>
+        </div>
+
+        <!-- ==================== Part 4: TDD 실습 ==================== -->
+
+        <!-- 36. Section Title -->
+        <div class="slide orange">
+            <h1>TDD 실습</h1>
+            <p class="sub">AI와 함께하는 테스트 주도 개발</p>
+        </div>
+
+        <!-- 37. Why TDD with AI -->
+        <div class="slide surface">
+            <h2>왜 AI에게 TDD가 좋은가</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">인간</p>
+                    <p>"나중에 테스트..."</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">AI</p>
+                    <p>귀찮다는 개념 없음<br>정교하게, 일관되게</p>
+                </div>
+            </div>
+            <p class="sub">TDD는 AI에게 시키기 최적의 작업</p>
+        </div>
+
+        <!-- 38. Kent Beck -->
+        <div class="slide">
+            <h2>켄트 벡이<br>다시 강연 다니는 이유</h2>
+            <p class="sub" style="margin-top: 48px;">
+                TDD 창시자가 AI 시대에 TDD를 다시 강조<br><br>
+                <span class="em">"AI가 테스트를 완벽하게 만들어주니까<br>TDD가 드디어 실용적이 됐다"</span>
+            </p>
+        </div>
+
+        <!-- 39. TDD Cycle -->
+        <div class="slide surface">
+            <h3>TDD 사이클: Red-Green-Refactor</h3>
+            <div class="pipeline">
+                <div class="pipeline-step red">Red<br><small>테스트 실패</small></div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step green">Green<br><small>테스트 통과</small></div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">Refactor<br><small>코드 개선</small></div>
+            </div>
+            <p class="sub">이 사이클을 AI와 함께 반복</p>
+        </div>
+
+        <!-- 40. TDD Prompt -->
+        <div class="slide">
+            <h3>TDD 프롬프트 패턴</h3>
+            <div class="code"><span class="comment"># Step 1: 테스트 먼저 (Red)</span>
+<span class="string">"wear_leveling_select_victim 함수의 테스트 케이스를
+먼저 작성해줘. 구현은 하지 마."</span>
+
+<span class="comment"># Step 2: 최소 구현 (Green)</span>
+<span class="string">"이 테스트들이 통과하도록 최소한으로 구현해줘."</span>
+
+<span class="comment"># Step 3: 리팩토링 (Refactor)</span>
+<span class="string">"테스트는 유지하면서 코드 품질을 개선해줘."</span></div>
+        </div>
+
+        <!-- 41. TDD Example -->
+        <div class="slide surface">
+            <h3>TDD 실습 예시</h3>
+            <div class="code"><span class="comment"># Step 1: 테스트 먼저 작성 (Red)</span>
+> wear_leveling_select_victim 함수에 대한 테스트 케이스 먼저 작성해줘.
+- 정상 케이스: erase count가 가장 낮은 블록 선택
+- 엣지 케이스: 모든 블록 erase count 동일
+- 에러 케이스: 선택 가능한 블록 없음
+
+<span class="comment"># Step 2: 최소 구현 (Green)</span>
+> 이 테스트들이 통과하도록 최소한으로 구현해줘.
+
+<span class="comment"># Step 3: 리팩토링 (Refactor)</span>
+> 코드 품질 개선해줘. 가독성, 성능 위주로.</div>
+        </div>
+
+        <!-- 42. Test Case Types -->
+        <div class="slide">
+            <h3>테스트 케이스 유형</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name green">정상 케이스</p>
+                    <p class="desc">Happy path</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name yellow">엣지 케이스</p>
+                    <p class="desc">경계값, 빈 값</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name red">에러 케이스</p>
+                    <p class="desc">잘못된 입력</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name em">성능 케이스</p>
+                    <p class="desc">대용량 데이터</p>
+                </div>
+            </div>
+            <p class="sub">AI에게 "이 4가지 유형 모두 작성해줘"라고 요청</p>
+        </div>
+
+        <!-- 43. Coverage -->
+        <div class="slide surface">
+            <h3>커버리지 목표 설정</h3>
+            <div class="code"><span class="comment"># CLAUDE.md에 추가</span>
+## 테스트 요구사항
+- 단위 테스트 커버리지: <span class="keyword">80% 이상</span>
+- 브랜치 커버리지: <span class="keyword">70% 이상</span>
+- 에러 핸들링 경로: <span class="keyword">100%</span>
+
+<span class="comment"># 프롬프트</span>
+<span class="string">"이 함수의 테스트 커버리지가 80%가 되도록
+테스트 케이스를 추가해줘."</span></div>
+        </div>
+
+        <!-- 44. TDD Practice -->
+        <div class="slide orange">
+            <h1>실습 시간</h1>
+            <p class="sub">담당 모듈에서 함수 하나 선택해서 TDD</p>
+        </div>
+
+        <!-- 45. TDD Practice Steps -->
+        <div class="slide surface">
+            <h2>TDD 실습 단계</h2>
+            <ul class="list">
+                <li><strong>Step 1</strong> — 테스트할 함수 선정 (담당 모듈에서)</li>
+                <li><strong>Step 2</strong> — "테스트 케이스 먼저 작성해줘" 요청</li>
+                <li><strong>Step 3</strong> — 테스트 실행 → 실패 확인 (Red)</li>
+                <li><strong>Step 4</strong> — "테스트 통과하도록 구현해줘" 요청</li>
+                <li><strong>Step 5</strong> — 테스트 실행 → 성공 확인 (Green)</li>
+                <li><strong>Step 6</strong> — "리팩토링해줘" 요청 (Refactor)</li>
+            </ul>
+        </div>
+
+        <!-- ==================== Part 5: Hooks 개념 ==================== -->
+
+        <!-- 47. Hooks Section -->
+        <div class="slide cyan">
+            <h1>Hooks</h1>
+            <p class="sub">이벤트 기반 <span class="em">자동 트리거</span> 시스템</p>
+        </div>
+
+        <!-- 48. What is Hook -->
+        <div class="slide surface">
+            <h2>Hook이란</h2>
+            <div class="pipeline">
+                <div class="pipeline-step">이벤트 발생</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">Hook 실행</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">자동 동작</div>
+            </div>
+            <p class="sub">특정 이벤트에 자동으로 반응하는 메커니즘<br>AI 동작을 <span class="em">가로채서</span> 검증하거나 수정</p>
+        </div>
+
+        <!-- 49. Hook Types Detail -->
+        <div class="slide">
+            <h3>Hook 종류와 트리거 시점</h3>
+            <div class="code"><span class="keyword">PreToolUse</span>
+<span class="comment">도구 실행 전에 호출</span>
+→ 차단(BLOCK) 또는 허용(ALLOW) 결정
+→ 입력 파라미터 검증/수정 가능
+
+<span class="keyword">PostToolUse</span>
+<span class="comment">도구 실행 후에 호출</span>
+→ 결과 검증, 후처리
+→ 자동 포맷팅, lint 실행 등
+
+<span class="keyword">Stop</span>
+<span class="comment">세션 종료 시 호출</span>
+→ 완료 조건 검사
+→ Ralph Loop의 핵심 메커니즘
+
+<span class="keyword">UserPromptSubmit</span>
+<span class="comment">사용자 입력 제출 시 호출</span>
+→ 입력 검증, 전처리</div>
+        </div>
+
+        <!-- 50. Hook Config -->
+        <div class="slide surface">
+            <h3>Hook 설정 방법</h3>
+            <div class="code"><span class="comment"># settings.local.json</span>
+{
+  "hooks": {
+    "<span class="keyword">PostToolUse</span>": [{
+      "matcher": "Write", <span class="comment">// 어떤 도구에 반응할지</span>
+      "hooks": [{
+        "type": "command",
+        "command": "npm run lint --fix" <span class="comment">// 실행할 명령</span>
+      }]
+    }],
+    "<span class="keyword">Stop</span>": [{
+      "hooks": [{
+        "type": "command",
+        "command": "bash scripts/verify-complete.sh"
+      }]
+    }]
+  }
+}</div>
+        </div>
+
+        <!-- ==================== Part 6: MCP 개념 ==================== -->
+
+        <!-- 51. MCP Section -->
+        <div class="slide indigo">
+            <h1>MCP</h1>
+            <p class="sub">Model Context Protocol<br>AI에게 <span class="em">외부 도구</span>를 연결</p>
+        </div>
+
+        <!-- 52. What is MCP -->
+        <div class="slide surface">
+            <h2>MCP란</h2>
+            <img src="mcp-ecosystem.png" alt="MCP Ecosystem"
+                style="max-width: 32vw; max-height: 32vh; margin-bottom: 2vh; border-radius: 8px;">
+            <div class="pipeline">
+                <div class="pipeline-step">Claude</div>
+                <span class="pipeline-arrow">↔</span>
+                <div class="pipeline-step on">MCP Server</div>
+                <span class="pipeline-arrow">↔</span>
+                <div class="pipeline-step">외부 도구</div>
+            </div>
+            <p class="sub">AI가 외부 세계와 상호작용하는 <span class="em">표준 프로토콜</span></p>
+        </div>
+
+        <!-- 53. MCP Examples -->
+        <div class="slide">
+            <h3>MCP 서버 예시</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">Context7</p>
+                    <p class="desc">라이브러리 문서<br>최신 API 참조</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">Sequential-Thinking</p>
+                    <p class="desc">다단계 추론<br>복잡한 분석</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">GitHub</p>
+                    <p class="desc">PR, Issue 관리</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">Filesystem</p>
+                    <p class="desc">파일 시스템 접근</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 54. MCP Config -->
+        <div class="slide surface">
+            <h3>MCP 설정 방법</h3>
+            <div class="code"><span class="comment"># ~/.claude/settings.json</span>
+{
+  "mcpServers": {
+    "<span class="string">context7</span>": {
+      "command": "npx",
+      "args": ["-y", "@context7/mcp-server"]
+    },
+    "<span class="string">sequential-thinking</span>": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-sequential-thinking"]
+    },
+    "<span class="string">github</span>": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_TOKEN": "..." }
+    }
+  }
+}</div>
+        </div>
+
+        <!-- ==================== Part 7: Multi-Agent / Sub-Agent 개념 ==================== -->
+
+        <!-- 55. Multi-Agent Section -->
+        <div class="slide mint">
+            <h1>Multi-Agent<br>& Sub-Agent</h1>
+            <p class="sub">여러 AI가 <span class="em">협업</span>하는 패턴</p>
+        </div>
+
+        <!-- 56. Multi-Agent Concept -->
+        <div class="slide surface">
+            <h2>왜 Multi-Agent인가</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">Single Agent</p>
+                    <p style="font-size:1.6rem">1명이 모든 관점<br>→ 편향 발생<br>→ 시간 오래 걸림</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">Multi-Agent</p>
+                    <p style="font-size:1.6rem">각자 전문 분야<br>→ 독립적 분석<br>→ 병렬 처리로 빠름</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 57. Agent Types -->
+        <div class="slide">
+            <h3>Agent 유형</h3>
+            <div class="code"><span class="keyword">Main Agent (주 에이전트)</span>
+- 사용자와 직접 대화
+- 전체 워크플로우 조율
+- Sub-Agent 호출 및 결과 종합
+
+<span class="keyword">Sub-Agent (서브 에이전트)</span>
+- 특정 작업에 특화
+- Main Agent에 의해 호출됨
+- 독립적으로 작업 후 결과 반환
+
+<span class="em">예시: Feature-Dev의 3개 서브에이전트</span>
+- code-explorer: 코드베이스 탐색 전문
+- code-architect: 아키텍처 설계 전문
+- code-reviewer: 코드 리뷰 전문</div>
+        </div>
+
+        <!-- 58. Parallel Execution -->
+        <div class="slide surface">
+            <h3>병렬 실행 패턴</h3>
+            <div class="code"><span class="comment"># 병렬로 3개 Agent 실행</span>
+<span class="keyword">다음 에이전트들을 병렬로 실행:</span>
+
+Agent 1: <span class="yellow">완전성 검증자</span>
+→ 요구사항 누락 여부 확인
+
+Agent 2: <span class="em">명확성 검증자</span>
+→ 모호한 표현 확인
+
+Agent 3: <span class="green">실현가능성 검증자</span>
+→ 기술적 구현 가능성 확인
+
+<span class="string">모든 에이전트 완료 후 결과 종합</span></div>
+            <p class="sub">Claude Code의 Task 도구가 <span class="em">자동으로 병렬 처리</span></p>
+        </div>
+
+        <!-- 59. Result Aggregation -->
+        <div class="slide">
+            <h3>결과 종합 메커니즘</h3>
+            <div class="pipeline">
+                <div class="pipeline-step">Agent 1</div>
+                <div class="pipeline-step">Agent 2</div>
+                <div class="pipeline-step">Agent 3</div>
+            </div>
+            <div class="pipeline" style="margin-top: 20px;">
+                <span class="pipeline-arrow">↓</span>
+            </div>
+            <div class="pipeline" style="margin-top: 20px;">
+                <div class="pipeline-step on">결과 종합</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step green">PASS</div>
+                <span style="margin: 0 10px;">/</span>
+                <div class="pipeline-step red">FAIL</div>
+            </div>
+            <p class="sub">모든 Agent 결과를 모아서 <span class="em">최종 판단</span></p>
+        </div>
+
+        <!-- ==================== Part 8: Official Plugins ==================== -->
+
+        <!-- 60. Section Title -->
+        <div class="slide rose">
+            <h1>Official<br>Plugins</h1>
+            <p class="sub">공식 플러그인의 <span class="em">메커니즘</span> 이해</p>
+        </div>
+
+        <!-- 61. Plugin Overview -->
+        <div class="slide surface">
+            <h3>공식 플러그인 4종</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name yellow">Hookify</p>
+                    <p class="desc">규칙 기반 동작 방지<br>마크다운 룰 엔진</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name green">Feature-Dev</p>
+                    <p class="desc">7단계 개발 워크플로우<br>3개 서브에이전트</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name em">Frontend-Design</p>
+                    <p class="desc">Bold Aesthetic UI<br>독창적 디자인 생성</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name red">Ralph Loop</p>
+                    <p class="desc">자기참조 반복 루프<br>완료까지 자동 진행</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 62. Hookify Section -->
+        <div class="slide cyan">
+            <h1>Hookify</h1>
+            <p class="sub">마크다운 규칙으로 AI 동작을 <span class="em">사전 방지</span></p>
+        </div>
+
+        <!-- 63. Hookify Mechanism -->
+        <div class="slide surface">
+            <h3>Hookify 동작 메커니즘</h3>
+            <div class="code"><span class="keyword">1. 규칙 파일 로드</span>
+~/.claude/hookify/rules/*.md 자동 스캔
+각 .md 파일이 하나의 prevention rule
+
+<span class="keyword">2. Hook 트리거</span>
+<span class="yellow">PreToolUse</span> → 도구 실행 전 규칙 검사
+<span class="yellow">PostToolUse</span> → 도구 실행 후 결과 검증
+<span class="yellow">Stop</span> → 세션 종료 시 최종 검사
+<span class="yellow">UserPromptSubmit</span> → 사용자 입력 검증
+
+<span class="keyword">3. 규칙 위반 시</span>
+<span class="red">BLOCK</span> → 동작 차단 + 이유 설명
+또는 conversation-analyzer 서브에이전트 호출</div>
+        </div>
+
+        <!-- 64. Hookify Rule Example -->
+        <div class="slide">
+            <h3>Hookify 규칙 파일 예시</h3>
+            <div class="code"><span class="comment"># ~/.claude/hookify/rules/no-secrets.md</span>
+<span class="keyword">---</span>
+name: no-secrets-commit
+hook: PreToolUse
+matcher: Bash
+<span class="keyword">---</span>
+
+# 시크릿 커밋 방지
+
+## 규칙
+git commit 명령 실행 전 다음을 확인:
+- .env 파일이 포함되어 있지 않은가?
+- API 키가 하드코딩되어 있지 않은가?
+- credentials.json이 스테이징되어 있지 않은가?
+
+## 위반 시
+<span class="red">BLOCK: 시크릿이 포함된 것 같습니다. 확인 후 제외하세요.</span></div>
+        </div>
+
+        <!-- 65. Hookify Sub-agent -->
+        <div class="slide surface">
+            <h3>Hookify 서브에이전트: conversation-analyzer</h3>
+            <div class="code"><span class="keyword">역할:</span>
+- 규칙 위반 여부를 심층 분석
+- 단순 패턴 매칭이 아닌 맥락 기반 판단
+
+<span class="keyword">호출 시점:</span>
+- PreToolUse에서 규칙 위반 의심 시
+- 복잡한 판단이 필요한 경우
+
+<span class="keyword">응답 형식:</span>
+{
+  "decision": "ALLOW" | "BLOCK",
+  "reason": "판단 근거 설명",
+  "confidence": 0-100
+}</div>
+            <p class="sub">단순 문자열 매칭이 아닌 <span class="em">AI 기반 맥락 분석</span></p>
+        </div>
+
+        <!-- 66. Feature-Dev Section -->
+        <div class="slide mint">
+            <h1>Feature-Dev</h1>
+            <p class="sub">체계적인 7단계 개발 워크플로우<br><span class="em">3개 서브에이전트</span> 병렬 검증</p>
+        </div>
+
+        <!-- 67. Feature-Dev 7 Phases -->
+        <div class="slide surface">
+            <h3>Feature-Dev 7단계 파이프라인</h3>
+            <div class="code"><span class="keyword">[1.DISCOVERY]</span> 사용자 의도 파악, 정보 수집
+<span class="keyword">[2.EXPLORATION]</span> <span class="em">★ 병렬 3개 에이전트</span>로 코드베이스 탐색
+<span class="keyword">[3.CLARIFY]</span> 요구사항 명확화 (사용자 질문)
+<span class="keyword">[4.ARCHITECTURE]</span> <span class="em">★ 병렬 3개 에이전트</span>로 설계 방안 도출
+<span class="keyword">[5.IMPLEMENT]</span> 코드 작성
+<span class="keyword">[6.REVIEW]</span> <span class="em">★ 병렬 3개 에이전트</span>로 코드 리뷰
+<span class="keyword">[7.SUMMARY]</span> 완료 보고서 생성</div>
+        </div>
+
+        <!-- 68. Feature-Dev Sub-agents -->
+        <div class="slide">
+            <h3>Feature-Dev 서브에이전트 3종</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">code-explorer</p>
+                    <p class="desc">코드베이스 탐색<br>패턴/아키텍처 분석<br>의존성 추적</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name green">code-architect</p>
+                    <p class="desc">아키텍처 설계<br>인터페이스 정의<br>트레이드오프 분석</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name red">code-reviewer</p>
+                    <p class="desc">코드 리뷰<br>버그/보안 검사<br>신뢰도 필터링</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 69. Feature-Dev Confidence Filter -->
+        <div class="slide surface">
+            <h3>신뢰도 기반 필터링 메커니즘</h3>
+            <div class="code"><span class="comment"># code-reviewer의 핵심 메커니즘</span>
+
+<span class="keyword">신뢰도 임계값</span>
+- SECURITY_VULNERABILITY: <span class="red">90%</span>
+- LOGIC_ERROR: <span class="yellow">85%</span>
+- CODE_QUALITY: <span class="green">80%</span>
+
+<span class="keyword">필터링 규칙</span>
+confidence < threshold → <span class="comment">FILTERED OUT (노이즈)</span>
+confidence >= threshold → <span class="green">REPORTED (실제 이슈)</span>
+
+<span class="keyword">왜 중요한가?</span>
+- False Positive 제거 → 개발자 피로도 감소
+- 진짜 중요한 이슈에만 집중
+- 보안 이슈는 높은 임계값으로 엄격히</div>
+        </div>
+
+        <!-- 70. Frontend-Design Section -->
+        <div class="slide indigo">
+            <h1>Frontend<br>Design</h1>
+            <p class="sub"><span class="em">Bold Aesthetic</span> UI 생성</p>
+        </div>
+
+        <!-- 71. Frontend-Design Mechanism -->
+        <div class="slide surface">
+            <h3>Frontend-Design 메커니즘</h3>
+            <div class="code"><span class="keyword">디자인 철학:</span>
+"AI가 생성한 것 같지 않은" 독창적 UI
+- Bold Typography (큰 글씨, 강한 대비)
+- Distinctive Color (일반적이지 않은 색상 조합)
+- Creative Layout (예측 불가능한 레이아웃)
+
+<span class="keyword">작동 방식:</span>
+1. 사용자 요청 분석
+2. 디자인 컨셉 수립 (Bold/Minimal/Playful 등)
+3. HTML/CSS/JS 단일 파일 생성
+4. 자동 프리뷰 제공
+
+<span class="keyword">서브에이전트:</span> 없음 (단일 에이전트)
+- 디자인 결정은 즉시 실행
+- 반복 수정 요청 시 빠른 응답</div>
+        </div>
+
+        <!-- 72. Ralph Loop Section -->
+        <div class="slide rose">
+            <h1>Ralph Loop</h1>
+            <p class="sub">자기참조 반복 루프<br><span class="em">완료까지 자동 진행</span></p>
+        </div>
+
+        <!-- 73. Ralph Loop Mechanism -->
+        <div class="slide surface">
+            <h3>Ralph Loop 동작 메커니즘</h3>
+            <div class="code"><span class="keyword">핵심 원리: 자기참조 (Self-Reference)</span>
+
+1. <span class="em">Stop Hook 가로채기</span>
+   - Claude가 "완료"라고 하려 할 때
+   - Stop Hook이 개입
+
+2. <span class="em">완료 조건 검사</span>
+   - completion-promise.md 파일 확인
+   - 모든 조건 충족 여부 판단
+
+3. <span class="em">미완료 시 자동 재개</span>
+   - "아직 완료되지 않았습니다" 메시지 주입
+   - Claude가 다시 작업 시작
+
+4. <span class="em">안전장치</span>
+   - max_iterations 설정 (기본 5회)
+   - 무한 루프 방지</div>
+        </div>
+
+        <!-- 74. Ralph Loop Flow -->
+        <div class="slide">
+            <h3>Ralph Loop 흐름도</h3>
+            <div class="pipeline">
+                <div class="pipeline-step">작업 시작</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">"완료" 시도</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">Stop Hook</div>
+            </div>
+            <div class="pipeline" style="margin-top: 24px;">
+                <div class="pipeline-step red">미완료?</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">자동 재개</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">작업 계속</div>
+            </div>
+            <div class="pipeline" style="margin-top: 24px;">
+                <div class="pipeline-step green">완료!</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">세션 종료</div>
+            </div>
+        </div>
+
+        <!-- ==================== Part 9: Agent SDK ==================== -->
+
+        <!-- 75. Section Title -->
+        <div class="slide amber">
+            <h1>Claude<br>Agent SDK</h1>
+            <p class="sub">프로그래밍 방식으로 <span class="em">에이전트 구축</span></p>
+        </div>
+
+        <!-- 76. What is Agent SDK -->
+        <div class="slide surface">
+            <h2>Agent SDK란</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">Skills/Hooks</p>
+                    <p style="font-size:1.6rem">마크다운 기반<br>선언적 정의<br>간단한 워크플로우</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">Agent SDK</p>
+                    <p style="font-size:1.6rem">Python/TypeScript<br>프로그래밍 방식<br>복잡한 로직 가능</p>
+                </div>
+            </div>
+            <p class="sub">더 정교한 제어가 필요할 때 Agent SDK 사용</p>
+        </div>
+
+        <!-- 77. Agent SDK Basic -->
+        <div class="slide">
+            <h3>Agent SDK 기본 구조</h3>
+            <div class="code"><span class="keyword">from</span> claude_code_sdk <span class="keyword">import</span> Agent, query
+
+<span class="comment"># 기본 에이전트 생성</span>
+agent = Agent(
+    name=<span class="string">"code-reviewer"</span>,
+    model=<span class="string">"sonnet"</span>,
+    prompt=<span class="string">"""
+    당신은 코드 리뷰 전문가입니다.
+    MISRA C 2012 기준으로 코드를 검토하세요.
+    """</span>
+)
+
+<span class="comment"># 에이전트 실행</span>
+result = <span class="keyword">await</span> agent.run(
+    task=<span class="string">"src/gc_module.c 파일을 리뷰해주세요"</span>
+)
+
+<span class="keyword">print</span>(result.output)</div>
+        </div>
+
+        <!-- 78. Multi-Agent Pattern -->
+        <div class="slide surface">
+            <h3>Multi-Agent 패턴</h3>
+            <div class="code"><span class="keyword">from</span> claude_code_sdk <span class="keyword">import</span> Agent, Swarm
+
+<span class="comment"># 여러 에이전트 정의</span>
+reviewers = [
+    Agent(name=<span class="string">"security"</span>, prompt=<span class="string">"보안 관점 리뷰"</span>),
+    Agent(name=<span class="string">"performance"</span>, prompt=<span class="string">"성능 관점 리뷰"</span>),
+    Agent(name=<span class="string">"quality"</span>, prompt=<span class="string">"코드 품질 리뷰"</span>)
+]
+
+<span class="comment"># Swarm으로 병렬 실행</span>
+swarm = Swarm(agents=reviewers)
+results = <span class="keyword">await</span> swarm.run_parallel(
+    task=<span class="string">"src/gc_module.c 리뷰"</span>
+)
+
+<span class="comment"># 결과 집계</span>
+<span class="keyword">for</span> r <span class="keyword">in</span> results:
+    <span class="keyword">print</span>(f"{r.agent_name}: {r.output}")</div>
+        </div>
+
+        <!-- 79. Agent SDK vs Skills -->
+        <div class="slide">
+            <h3>언제 무엇을 쓸까</h3>
+            <table class="tbl">
+                <tr>
+                    <th>상황</th>
+                    <th>추천</th>
+                </tr>
+                <tr>
+                    <td>간단한 워크플로우</td>
+                    <td class="green">Skills (SKILL.md)</td>
+                </tr>
+                <tr>
+                    <td>규칙 기반 방지</td>
+                    <td class="green">Hookify</td>
+                </tr>
+                <tr>
+                    <td>복잡한 분기 로직</td>
+                    <td class="em">Agent SDK</td>
+                </tr>
+                <tr>
+                    <td>외부 시스템 연동</td>
+                    <td class="em">Agent SDK + MCP</td>
+                </tr>
+                <tr>
+                    <td>CI/CD 통합</td>
+                    <td class="em">Agent SDK</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ==================== Agentic Workflow ==================== -->
+
+        <!-- Agentic Workflow Section -->
+        <div class="slide violet">
+            <h1>Agentic<br>Workflow</h1>
+            <p class="sub">AI를 단순 도구가 아닌<br><span class="em">자율적 협업자</span>로 활용</p>
+        </div>
+
+        <!-- What is Agentic -->
+        <div class="slide surface">
+            <h2>Agentic이란</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">Traditional</p>
+                    <p style="font-size:1.6rem">질문 → 답변<br>1회성 상호작용<br>수동적</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">Agentic</p>
+                    <p style="font-size:1.6rem">목표 → 자율 실행<br>다단계 추론<br>능동적</p>
+                </div>
+            </div>
+            <p class="sub">AI가 스스로 판단하고 실행하는 방식</p>
+        </div>
+
+        <!-- Why Workflow Matters -->
+        <div class="slide">
+            <h2>워크플로우가 중요합니다</h2>
+            <p class="sub" style="margin-bottom: 32px;">
+                AI 모델은 누구나 같은 걸 쓴다<br>
+                <span class="em">차별화는 워크플로우에서 나온다</span>
+            </p>
+            <div class="quote-box">
+                <p>"좋은 워크플로우를 구축하려면<br>개인화된 방식을 스스로 깨우치고 학습하는 게 중요하다"</p>
+            </div>
+        </div>
+
+        <!-- Personalization -->
+        <div class="slide surface">
+            <h3>개인화 철학</h3>
+            <ul class="list">
+                <li><strong class="red">남의 워크플로우 복사</strong> — 맥락이 다르면 효과 없음</li>
+                <li><strong class="yellow">패턴 학습</strong> — 다른 사람의 접근법 참고</li>
+                <li><strong class="green">자신만의 구축</strong> — 내 업무에 맞게 커스터마이징</li>
+            </ul>
+            <p class="sub">패턴을 배우고, 내 것으로 만들기</p>
+        </div>
+
+        <!-- Extension System -->
+        <div class="slide">
+            <h3>Claude Code 확장 시스템</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">Skills</p>
+                    <p class="desc">워크플로우 패키지</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">Commands</p>
+                    <p class="desc">슬래시 명령어</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">Hooks</p>
+                    <p class="desc">자동 트리거</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">MCP</p>
+                    <p class="desc">외부 도구 연결</p>
+                </div>
+            </div>
+            <p class="sub">이 4가지를 조합해서 <span class="em">나만의 자동화</span> 구축</p>
+        </div>
+
+        <!-- ==================== Skills 구축 ==================== -->
+
+        <!-- Skills Section -->
+        <div class="slide mint">
+            <h1>Skills</h1>
+            <p class="sub">워크플로우를 패키지로 만들기<br><span class="em">/명령어</span> 하나로 복잡한 작업 실행</p>
+        </div>
+
+        <!-- What is Skill -->
+        <div class="slide surface">
+            <h2>Skill이란</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">Before</p>
+                    <p style="font-size:1.6rem">매번 긴 프롬프트 입력<br>반복되는 설명<br>일관성 없음</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">After</p>
+                    <p style="font-size:1.6rem">/my-workflow<br>한 번에 실행<br>항상 동일</p>
+                </div>
+            </div>
+            <p class="sub">반복 작업을 <span class="em">재사용 가능한 패키지</span>로</p>
+        </div>
+
+        <!-- Skill Structure -->
+        <div class="slide">
+            <h3>Skill 폴더 구조</h3>
+            <div class="code">~/.claude/skills/my-workflow/
+├── <span class="keyword">SKILL.md</span>     <span class="comment"># 스킬 정의 (필수)</span>
+├── templates/        <span class="comment"># 템플릿 파일들</span>
+│   └── prd.md
+├── prompts/          <span class="comment"># 프롬프트 모음</span>
+│   └── analysis.md
+└── examples/         <span class="comment"># 예시 파일들</span></div>
+            <p class="sub">SKILL.md만 있으면 스킬로 인식됩니다</p>
+        </div>
+
+        <!-- SKILL.md Example -->
+        <div class="slide surface">
+            <h3>SKILL.md 기본 구조</h3>
+            <div class="code"><span class="keyword">---</span>
+name: code-review
+description: MISRA C 기준 코드 리뷰
+triggers: [/review, /리뷰]
+<span class="keyword">---</span>
+
+# 코드 리뷰 워크플로우
+
+## 검토 기준
+- MISRA C 2012 위반 사항
+- 메모리 누수 가능성
+- NULL 포인터 체크 누락
+
+## 출력 형식
+| 파일 | 라인 | 심각도 | 내용 |</div>
+        </div>
+
+        <!-- Command vs Skill 비교 -->
+        <div class="slide">
+            <h3>Command vs Skill 비교</h3>
+            <table class="tbl">
+                <tr>
+                    <th></th>
+                    <th>Command</th>
+                    <th>Skill</th>
+                </tr>
+                <tr>
+                    <td>뭐냐</td>
+                    <td><strong class="em">단축키</strong></td>
+                    <td><strong class="green">지식</strong></td>
+                </tr>
+                <tr>
+                    <td>누가</td>
+                    <td>내가 실행</td>
+                    <td>Claude가 참조</td>
+                </tr>
+                <tr>
+                    <td>언제</td>
+                    <td>/명령어 입력 시</td>
+                    <td>작업 전 자동</td>
+                </tr>
+                <tr>
+                    <td>왜</td>
+                    <td>긴 프롬프트 줄이려고</td>
+                    <td>Claude가 맥락 알게</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Command만 있으면 -->
+        <div class="slide surface">
+            <h3>Command만 있으면?</h3>
+            <div class="code"><span class="comment"># Command만 있는 경우</span>
+나: /review auth.py
+
+Claude: (리뷰는 하는데 우리 팀 규칙을 모름)
+
+<span class="red">"이 함수명 camelCase 추천합니다"</span>
+← 우리 팀은 snake_case 쓰는데...</div>
+            <div class="warn">
+                <p>단축키는 있지만 맥락(규칙)이 없어서 엉뚱한 결과</p>
+            </div>
+        </div>
+
+        <!-- 둘 다 있으면 -->
+        <div class="slide">
+            <h3>둘 다 있으면?</h3>
+            <div class="code"><span class="comment"># Command + Skill 조합</span>
+나: /review auth.py
+
+Claude: <span class="green">(Skill 읽고 우리 규칙 파악)</span>
+
+<span class="green">"snake_case 규칙 위반입니다"</span> ← 정확!</div>
+            <div class="tip">
+                <p>단축키(Command)로 호출 + 규칙(Skill)으로 맥락 = 완벽한 조합</p>
+            </div>
+        </div>
+
+        <!-- ==================== 10-Phase Workflow ==================== -->
+
+        <!-- 10-Phase Section -->
+        <div class="slide cyan">
+            <h1>10-Phase<br>Workflow</h1>
+            <p class="sub">체계적인 개발 파이프라인</p>
+        </div>
+
+        <!-- 10 Phases Overview -->
+        <div class="slide surface">
+            <h3>10-Phase 플로우</h3>
+            <div class="code"><span class="keyword">[1.INIT]</span>      상태 파일 + 훅 등록
+<span class="keyword">[2.ANALYZE]</span>   요구사항 분석 (REQ/AC 정의)
+<span class="keyword">[3.REQ-VERIFY]</span> <span class="em">★ 병렬 3개 에이전트</span> (완전성/명확성/실현가능성)
+<span class="keyword">[4.EXPLORE]</span>   코드베이스 탐색 (병렬 3개)
+<span class="keyword">[5.DESIGN]</span>    아키텍처 설계 (병렬 3개 접근법)
+<span class="keyword">[6.DESIGN-VERIFY]</span> <span class="em">★ 병렬 3개 에이전트</span> (타당성/호환성/유지보수성)
+<span class="keyword">[7.IMPLEMENT]</span> 코드 작성
+<span class="keyword">[8.CODE-VERIFY]</span> <span class="em">★ 병렬 4개 에이전트</span> (verify-work)
+<span class="keyword">[9.TEST]</span>      테스트 + 커버리지 90%+
+<span class="keyword">[10.COMPLETE]</span> 완료 보고서 + 훅 제거</div>
+        </div>
+
+        <!-- Confidence Filter -->
+        <div class="slide">
+            <h3>신뢰도 기반 필터링</h3>
+            <div class="code"><span class="comment"># 신뢰도 임계값 설정</span>
+<span class="keyword">THRESHOLDS = {</span>
+  SECURITY_VULNERABILITY: <span class="red">90%</span>
+  MISSING_REQUIREMENT:    <span class="yellow">85%</span>
+  TEST_COVERAGE_GAP:      <span class="green">80%</span>
+  CODE_QUALITY:           <span class="em">75%</span>
+<span class="keyword">}</span>
+
+<span class="comment"># 필터링 규칙</span>
+신뢰도 < 임계값 → <span class="yellow">FILTERED OUT</span> (노이즈 제거)
+신뢰도 >= 임계값 → <span class="green">REPORTED</span> (보고)</div>
+            <p class="sub">False Positive 제거로 <span class="em">개발자 집중도 향상</span></p>
+        </div>
+
+        <!-- ==================== Claude Code vs Cursor ==================== -->
+
+        <!-- Comparison Section -->
+        <div class="slide teal">
+            <h1>Claude Code<br>vs Cursor</h1>
+            <p class="sub">도구별 특성과 선택 기준</p>
+        </div>
+
+        <!-- Feature Comparison -->
+        <div class="slide surface">
+            <h3>기능 비교</h3>
+            <table class="tbl">
+                <tr>
+                    <th>기능</th>
+                    <th>Claude Code</th>
+                    <th>Cursor</th>
+                </tr>
+                <tr>
+                    <td>맥락 파일</td>
+                    <td>CLAUDE.md</td>
+                    <td>.cursorrules</td>
+                </tr>
+                <tr>
+                    <td>확장 시스템</td>
+                    <td>Skills, Hooks</td>
+                    <td>Rules, @Docs</td>
+                </tr>
+                <tr>
+                    <td>외부 도구</td>
+                    <td>MCP</td>
+                    <td>제한적</td>
+                </tr>
+                <tr>
+                    <td>병렬 Agent</td>
+                    <td>Task 도구</td>
+                    <td>미지원</td>
+                </tr>
+                <tr>
+                    <td>Agent SDK</td>
+                    <td>Python/TS</td>
+                    <td>미지원</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- When to Use -->
+        <div class="slide">
+            <h3>언제 무엇을 쓸까</h3>
+            <div class="comp">
+                <div class="comp-item on">
+                    <p class="tag">Claude Code</p>
+                    <p style="font-size:1.6rem">복잡한 워크플로우<br>CI/CD 통합<br>자동화 파이프라인<br>다중 Agent 협업</p>
+                </div>
+                <div class="comp-item green-on">
+                    <p class="tag">Cursor</p>
+                    <p style="font-size:1.6rem">빠른 코드 수정<br>IDE 통합 환경<br>인라인 편집<br>간단한 작업</p>
+                </div>
+            </div>
+            <p class="sub">상황에 맞게 도구를 선택하세요</p>
+        </div>
+
+        <!-- ==================== 실습 프로젝트 ==================== -->
+
+        <!-- Practice Project Section -->
+        <div class="slide mint">
+            <h1>실습 프로젝트</h1>
+            <p class="sub">포모도로 타이머<br>Claude Code로 <span class="em">직접 수정</span>해보기</p>
+        </div>
+
+        <!-- 81. Why Pomodoro -->
+        <div class="slide surface">
+            <h2>왜 포모도로 타이머인가</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">장점</p>
+                    <p style="font-size:1.7rem">API 키 불필요<br>브라우저에서 바로 실행<br>시각적 변화 즉시 확인</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">수정 포인트</p>
+                    <p style="font-size:1.7rem">UI 색상/스타일<br>타이머 로직<br>알림, 통계 기능</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 82. Pomodoro What -->
+        <div class="slide">
+            <h3>포모도로 타이머란?</h3>
+            <div class="code"><span class="keyword">집중력 관리 도구</span>
+
+25분 집중 작업 → 5분 휴식 → 반복
+
+┌─────────────────────────┐
+│        🍅 25:00         │
+│    ████████████░░░░     │
+│   [시작]  [리셋]        │
+│   완료: 🍅🍅🍅          │
+└─────────────────────────┘</div>
+        </div>
+
+        <!-- 83. Project Setup -->
+        <div class="slide surface">
+            <h3>프로젝트 셋업 (2분)</h3>
+            <div class="code"><span class="comment"># 1. 클론</span>
+git clone https://github.com/MarkosComK/pomodoro-clock.git
+
+<span class="comment"># 2. 폴더 이동</span>
+cd pomodoro-clock
+
+<span class="comment"># 3. 브라우저에서 index.html 열기 (더블클릭)</span>
+<span class="keyword">npm 설치 필요 없음!</span>
+
+<span class="comment"># 4. Claude Code 시작</span>
+claude</div>
+        </div>
+
+        <!-- 84. Practice Curriculum -->
+        <div class="slide">
+            <h3>2시간 실습 커리큘럼</h3>
+            <table class="tbl">
+                <tr>
+                    <th>단계</th>
+                    <th>시간</th>
+                    <th>Claude Code 요청</th>
+                </tr>
+                <tr>
+                    <td>1. 구조 파악</td>
+                    <td>10분</td>
+                    <td>"이 프로젝트 구조 설명해줘"</td>
+                </tr>
+                <tr>
+                    <td>2. 색상 변경</td>
+                    <td>15분</td>
+                    <td class="em">"배경색 다크 네이비로"</td>
+                </tr>
+                <tr>
+                    <td>3. 버튼 스타일</td>
+                    <td>15분</td>
+                    <td>"시작 버튼 더 크게"</td>
+                </tr>
+                <tr>
+                    <td>4. 시간 변경</td>
+                    <td>20분</td>
+                    <td class="yellow">"기본 시간 50분으로"</td>
+                </tr>
+                <tr>
+                    <td>5. 알림음 추가</td>
+                    <td>20분</td>
+                    <td class="green">"타이머 끝나면 알림음"</td>
+                </tr>
+                <tr>
+                    <td>6. 세션 카운터</td>
+                    <td>20분</td>
+                    <td>"완료 횟수 표시"</td>
+                </tr>
+                <tr>
+                    <td>7. 다크모드</td>
+                    <td>20분</td>
+                    <td class="em">"다크/라이트 토글"</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 85. Practice Step by Step -->
+        <div class="slide surface">
+            <h3>실습 Step by Step</h3>
+            <div class="code"><span class="comment"># Claude Code 시작</span>
+cd pomodoro-clock
+claude
+
+<span class="comment"># Step 1: 프로젝트 이해</span>
+<span class="string">"이 프로젝트 파일 구조랑 어떻게 동작하는지 설명해줘"</span>
+
+<span class="comment"># Step 2: 첫 번째 수정</span>
+<span class="string">"타이머 원형 프로그레스 바 색상을 초록색으로 바꿔줘"</span>
+
+<span class="comment"># Step 3: 기능 추가</span>
+<span class="string">"휴식 시간 끝나면 '휴식 끝!' 이라고 화면에 표시해줘"</span>
+
+<span class="keyword">→ 브라우저 새로고침으로 즉시 확인!</span></div>
+        </div>
+
+        <!-- 86. Practice Tips -->
+        <div class="slide">
+            <h3>실습 팁</h3>
+            <ul class="list">
+                <li><strong class="em">작은 것부터</strong> — 색상 하나 바꾸는 것부터 시작</li>
+                <li><strong>바로 확인</strong> — 수정 후 브라우저 새로고침</li>
+                <li><strong class="yellow">구체적으로 요청</strong> — "버튼을 파란색으로" vs "예쁘게"</li>
+                <li><strong class="green">단계적으로</strong> — 한 번에 많이 바꾸지 않기</li>
+                <li><strong>되돌리기</strong> — git checkout . 로 원상복구</li>
+            </ul>
+        </div>
+
+        <!-- 87. Practice Checklist -->
+        <div class="slide surface">
+            <h2>실습 체크리스트</h2>
+            <ul class="list">
+                <li>☐ git clone 완료</li>
+                <li>☐ 브라우저에서 index.html 열림</li>
+                <li>☐ Claude Code 실행 (claude 명령어)</li>
+                <li>☐ 색상 변경 성공</li>
+                <li>☐ 버튼 크기 변경 성공</li>
+                <li>☐ 타이머 시간 수정 성공</li>
+                <li>☐ 새 기능 1개 추가 성공</li>
+            </ul>
+        </div>
+
+        <!-- 88. Alternative Projects -->
+        <div class="slide">
+            <h3>대안 프로젝트들</h3>
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">Calculator</p>
+                    <p class="desc">순수 JS 계산기<br>버튼 UI 수정</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">Quiz App</p>
+                    <p class="desc">퀴즈 웹앱<br>질문/점수 추가</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name yellow">Todo List</p>
+                    <p class="desc">할 일 관리<br>localStorage 저장</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name green">Tic-Tac-Toe</p>
+                    <p class="desc">틱택토 게임<br>AI 상대 추가</p>
+                </div>
+            </div>
+            <p class="sub" style="margin-top: 2vh;">practical-front-end-projects (GitHub)에서 더 많은 프로젝트</p>
+        </div>
+
+        <!-- ==================== 마무리 ==================== -->
+
+        <!-- Summary -->
+        <div class="slide surface">
+            <h2>핵심 정리</h2>
+            <ul class="list">
+                <li><strong class="em">Context Engineering</strong> — 맥락이 품질을 결정</li>
+                <li><strong>CLAUDE.md & Rule-Growing</strong> — 룰이 함께 진화</li>
+                <li><strong>Agentic Workflow</strong> — 자율적 AI 협업</li>
+                <li><strong class="yellow">Skills & Commands</strong> — 워크플로우 패키징</li>
+                <li><strong class="green">Agent SDK</strong> — 프로그래밍 방식 에이전트</li>
+                <li><strong class="em">10-Phase Workflow</strong> — 체계적 파이프라인</li>
+            </ul>
+        </div>
+
+        <!-- Key Message -->
+        <div class="slide">
+            <h2>핵심 메시지</h2>
+            <div class="quote-box">
+                <p>"AI 모델은 누구나 같은 걸 쓴다.<br><br>
+                    <strong>차별화는 워크플로우에서 나온다.</strong><br><br>
+                    배운 패턴을 기반으로<br>
+                    나만의 Agent Factory를 구축하세요."
+                </p>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="slide surface">
+            <h2>다음 단계</h2>
+            <ul class="list">
+                <li><strong>1주차</strong> — CLAUDE.md 고도화, Rule-Growing 실천</li>
+                <li><strong>2주차</strong> — 첫 번째 Skill 완성, 팀 공유</li>
+                <li><strong>3주차</strong> — MCP 연동, 병렬 검증 도입</li>
+                <li><strong>4주차</strong> — 전체 워크플로우 완성</li>
+            </ul>
+        </div>
+
+        <!-- 83. QA -->
+        <div class="slide blue">
+            <h1>Q&A</h1>
+            <p class="sub">감사합니다</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">김학민 · SE P/J</p>
+        </div>
+
+    </div>
+
+    <div class="nav">
+        <button onclick="prev()">←</button>
+        <button onclick="next()">→</button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+        let current = 0;
+        function goTo(index) {
+            if (index < 0) index = 0;
+            if (index >= total) index = total - 1;
+            current = index;
+            document.getElementById('slides').style.transform = `translateX(-${current * 100}vw)`;
+        }
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+            else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+        });
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
+        });
+    </script>
+
+</body>
+
+</html>

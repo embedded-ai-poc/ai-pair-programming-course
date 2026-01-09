@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 페어프로그래밍 - 통합 마스터 클래스</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0A0A0F;
+            color: #F0F0F5;
+            overflow: hidden;
+        }
+
+        .slides {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide {
+            min-width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            background: #0A0A0F;
+            position: relative;
+        }
+
+        .slide.light {
+            background: #F5F6FA;
+            color: #0A0A0F;
+        }
+
+        .slide.surface {
+            background: #0F1015;
+        }
+
+        .slide.blue {
+            background: linear-gradient(135deg, #0D1B3E 0%, #1428A0 100%);
+        }
+
+        .slide.mint {
+            background: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+        }
+
+        .slide.orange {
+            background: linear-gradient(135deg, #7C2D12 0%, #EA580C 100%);
+        }
+
+        .slide.violet {
+            background: linear-gradient(135deg, #3B0764 0%, #7C3AED 100%);
+        }
+
+        .slide.google {
+            background: linear-gradient(135deg, #1a1a2e 0%, #4285F4 100%);
+        }
+
+        .slide.mint .sub,
+        .slide.orange .sub,
+        .slide.violet .sub,
+        .slide.blue .sub,
+        .slide.google .sub {
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .slide.light .sub {
+            color: #5A6070;
+        }
+
+        .slide.mint .em {
+            color: #6EE7B7;
+        }
+
+        .slide.orange .em {
+            color: #FED7AA;
+        }
+
+        .slide.violet .em {
+            color: #C4B5FD;
+        }
+
+        .slide.blue .em {
+            color: #8AB8FF;
+        }
+
+        .slide.google .em {
+            color: #8AB8FF;
+        }
+
+        .slide.light .em {
+            color: #1428A0;
+        }
+
+        h1 {
+            font-size: clamp(3.2rem, 8vw, 6rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(2.2rem, 5.5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 36px;
+            letter-spacing: -0.01em;
+        }
+
+        .sub {
+            font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+            color: #8890A0;
+            margin-top: 28px;
+            text-align: center;
+            line-height: 1.85;
+            font-weight: 300;
+        }
+
+        .em {
+            color: #4A8CFF;
+        }
+
+        .red {
+            color: #F87171;
+        }
+
+        .green {
+            color: #10B981;
+        }
+
+        .yellow {
+            color: #FBBF24;
+        }
+
+        .meta {
+            margin-top: 60px;
+            font-size: 0.95rem;
+            color: #4A5060;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        blockquote {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 300;
+            max-width: 850px;
+            text-align: center;
+            line-height: 1.7;
+            color: #F0F0F5;
+        }
+
+        .big {
+            font-size: clamp(8rem, 25vw, 16rem);
+            font-weight: 900;
+            color: #4A8CFF;
+            line-height: 1;
+            opacity: 0.25;
+        }
+
+        .tool-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .tool-card {
+            background: #12141A;
+            border: 1px solid #252830;
+            padding: 36px 40px;
+            min-width: 280px;
+            max-width: 330px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .tool-card.recommended {
+            border-color: #10B981;
+            background: linear-gradient(180deg, #0F1015 0%, #064E3B20 100%);
+        }
+
+        .tool-card.hot {
+            border-color: #F59E0B;
+            background: linear-gradient(180deg, #0F1015 0%, #78350F20 100%);
+        }
+
+        .tool-card .name {
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .tool-card .desc {
+            font-size: 1.05rem;
+            color: #8890A0;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .tag-item {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 5px 12px;
+            background: #252830;
+            color: #8890A0;
+            border-radius: 4px;
+            margin: 3px;
+        }
+
+        .tag-item.green {
+            background: #064E3B;
+            color: #6EE7B7;
+        }
+
+        .tag-item.blue {
+            background: #1E3A5F;
+            color: #8AB8FF;
+        }
+
+        .tag-item.yellow {
+            background: #713F12;
+            color: #FCD34D;
+        }
+
+        .comp {
+            display: flex;
+            gap: 24px;
+            margin: 48px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .comp-item {
+            padding: 44px 52px;
+            text-align: center;
+            background: #12141A;
+            min-width: 220px;
+            border: 1px solid #252830;
+            border-radius: 8px;
+        }
+
+        .comp-item.on {
+            background: #1428A0;
+            border-color: #4A8CFF;
+        }
+
+        .comp-item .tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 16px;
+            color: #5A6070;
+        }
+
+        .comp-item.on .tag {
+            color: #8AB8FF;
+        }
+
+        .comp-item p {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .list {
+            list-style: none;
+            max-width: 780px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .list li {
+            font-size: 1.25rem;
+            padding: 22px 0;
+            border-bottom: 1px solid #252830;
+            color: #A0A8B8;
+            font-weight: 400;
+        }
+
+        .list li:last-child {
+            border-bottom: none;
+        }
+
+        .list strong {
+            color: #F0F0F5;
+            font-weight: 700;
+        }
+
+        .slide.light .list strong {
+            color: #0A0A0F;
+        }
+
+        .code {
+            background: #12141A;
+            border: 1px solid #252830;
+            padding: 32px 36px;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            max-width: 880px;
+            width: 92%;
+            margin: 28px 0;
+            white-space: pre-wrap;
+            color: #A0A8B8;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        .code .comment {
+            color: #5A6070;
+        }
+
+        .code .keyword {
+            color: #C4B5FD;
+        }
+
+        .code .string {
+            color: #6EE7B7;
+        }
+
+        .grid {
+            display: flex;
+            gap: 18px;
+            margin-top: 44px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .grid-item {
+            padding: 32px 36px;
+            text-align: center;
+            background: #12141A;
+            min-width: 170px;
+            border: 1px solid #252830;
+            border-radius: 8px;
+        }
+
+        .grid-item .name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .grid-item .desc {
+            font-size: 1rem;
+            color: #6A7080;
+            font-weight: 300;
+        }
+
+        .warn {
+            background: #14161A;
+            border-left: 3px solid #F59E0B;
+            padding: 24px 32px;
+            margin-top: 32px;
+            max-width: 680px;
+        }
+
+        .warn p {
+            color: #F59E0B;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .tip {
+            background: #14161A;
+            border-left: 3px solid #10B981;
+            padding: 24px 32px;
+            margin-top: 32px;
+            max-width: 680px;
+        }
+
+        .tip p {
+            color: #10B981;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .tbl {
+            margin-top: 32px;
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .tbl th,
+        .tbl td {
+            padding: 18px 28px;
+            text-align: left;
+            border-bottom: 1px solid #252830;
+        }
+
+        .tbl th {
+            color: #5A6070;
+            font-weight: 400;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+        }
+
+        .tbl td {
+            font-size: 1.05rem;
+            color: #A0A8B8;
+        }
+
+        .quote-box {
+            background: #12141A;
+            border-left: 3px solid #4A8CFF;
+            padding: 28px 32px;
+            margin: 28px 0;
+            max-width: 720px;
+        }
+
+        .quote-box p {
+            font-size: 1.15rem;
+            color: #A0A8B8;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 36px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pipeline-step {
+            background: #12141A;
+            border: 1px solid #252830;
+            padding: 18px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .pipeline-step.on {
+            background: #1428A0;
+            border-color: #4A8CFF;
+        }
+
+        .pipeline-arrow {
+            color: #3A4050;
+            font-size: 1.3rem;
+        }
+
+        .page-num {
+            position: fixed;
+            bottom: 32px;
+            right: 48px;
+            font-size: 0.85rem;
+            color: #3A4050;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            z-index: 100;
+        }
+
+        .nav {
+            position: fixed;
+            bottom: 32px;
+            left: 48px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .nav button {
+            width: 44px;
+            height: 44px;
+            background: rgba(20, 20, 30, 0.8);
+            border: 1px solid #252830;
+            color: #5A6070;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .nav button:hover {
+            border-color: #4A8CFF;
+            color: #4A8CFF;
+            background: #1428A020;
+        }
+
+        .part-divider {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 24px;
+        }
+
+        .part-label {
+            position: fixed;
+            top: 32px;
+            left: 48px;
+            font-size: 0.75rem;
+            color: #3A4050;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            z-index: 100;
+        }
+
+        .slide img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 24px;
+            }
+
+            .comp {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .comp-item {
+                min-width: auto;
+                padding: 28px 24px;
+            }
+
+            .tool-cards {
+                flex-direction: column;
+            }
+
+            .grid {
+                flex-direction: column;
+            }
+
+            .nav {
+                left: 20px;
+                bottom: 20px;
+            }
+
+            .page-num {
+                right: 20px;
+                bottom: 20px;
+            }
+
+            .pipeline {
+                gap: 8px;
+            }
+
+            .pipeline-step {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="part-label" id="part-label">Day 1 · 마인드셋</div>
+
+    <div class="slides" id="slides">
+
+        <!-- ==================== DAY 1: 마인드셋 & 첫 경험 ==================== -->
+
+        <div class="slide blue">
+            <p class="part-divider">Part 1 · 마인드셋</p>
+            <h1>AI 페어프로그래밍</h1>
+            <p class="sub">AI 시대, 개발자의 새로운 역할</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">김학민 · SE P/J · 2025.12</p>
+        </div>
+
+        <div class="slide surface">
+            <h2>들어가며</h2>
+            <p class="sub">AI 전문가도 아니고,<br><br>취미로 남들보다 조금 먼저 시작했고<br>관심이 있어서 이것저것 먼저 해보고<br>경험해본 사람 정도로 생각해주시면 좋겠습니다
+            </p>
+        </div>
+
+        <div class="slide">
+            <h2>오늘의 목표</h2>
+            <p class="sub" style="font-size: 1.4rem;">
+                <span class="em">"AI가 이 정도까지 해준다"</span>를 경험하기
+            </p>
+            <p class="sub" style="margin-top: 48px; font-size: 1rem; opacity: 0.7;">
+                두려움 없이 막 물어보는 습관 만들기<br>
+                마스터셰프 마인드 장착하기
+            </p>
+        </div>
+
+        <div class="slide surface">
+            <img src="day1-cover.png" alt="AI Master Chef Mindset"
+                style="max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <p class="sub">AI를 지휘하는 마스터셰프의 마인드셋</p>
+        </div>
+
+        <div class="slide">
+            <blockquote>
+                "현재 모델의 성능을<br>100% 사용하는 사람은 거의 없다"
+            </blockquote>
+            <p class="sub" style="margin-top: 40px; font-size: 0.95rem;">
+                — 많은 AI 전문가들의 공통된 의견
+            </p>
+        </div>
+
+        <div class="slide">
+            <div class="big">10%</div>
+            <p class="sub">우리 대부분이 AI를 쓰는 수준</p>
+            <img src="ai-usage-10-2d.png" alt="10% AI Usage"
+                style="max-width: 400px; margin-top: 24px; border-radius: 12px;">
+        </div>
+
+        <div class="slide light">
+            <h2>지금 우리가 AI 쓰는 법</h2>
+            <img src="ask-reply-paste.png" alt="질문-답변-복붙" style="max-width: 560px; margin: 40px 0;">
+            <p class="sub">질문 → 답변 → 복붙 → 끝<br>이건 AI를 <strong class="em">검색 엔진</strong>으로 쓰는 것</p>
+        </div>
+
+        <div class="slide surface">
+            <h2>챗봇 시대 → Agent 시대</h2>
+            <div class="comp">
+                <div class="comp-item">
+                    <p class="tag">Before</p>
+                    <p>질문 → 답변</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">After</p>
+                    <p>작업 위임 → 실행 → 검증</p>
+                </div>
+            </div>
+            <p class="sub">한 번의 주고받기가 아니라<br>AI가 알아서 수행하고 보고</p>
+        </div>
+
+        <div class="slide">
+            <h2>Recursive Gap Filling</h2>
+            <p class="sub" style="margin-bottom: 40px;">재귀적 틈새 메우기</p>
+            <img src="recursive-gap-filling.png" alt="Recursive Gap Filling"
+                style="max-width: 450px; margin-bottom: 32px;">
+            <ul class="list">
+                <li>실제 문제를 먼저 접한다</li>
+                <li>AI에게 해결 방법을 묻고 코드를 생성한다</li>
+                <li>이해 안 되면 <strong>"12살에게 설명하듯이"</strong> 다시 묻는다</li>
+                <li>반복하다 보면 <strong class="em">전체 구조가 보인다</strong></li>
+            </ul>
+        </div>
+
+        <div class="slide mint">
+            <h2>Vibe Coding</h2>
+            <img src="vibe-coding-2d.png" alt="Vibe Coding" style="max-width: 480px; margin: 32px 0;">
+            <p class="sub">Andrej Karpathy (2025.02)<br>"코드가 존재한다는 것 자체를 잊어버리는 코딩"</p>
+        </div>
+
+        <div class="slide blue">
+            <p class="formula" style="font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 700;">
+                <span class="em">Model</span> × <span style="opacity:0.6">Harness</span> × <span class="em">Pilot</span>
+            </p>
+            <p class="sub">AI 페어프로그래밍의 세 가지 요소</p>
+        </div>
+
+        <div class="slide violet">
+            <h1><span class="em">Pilot</span></h1>
+            <p class="sub">가장 중요한 요소 = 당신</p>
+        </div>
+
+        <div class="slide surface">
+            <h3>Pilot의 핵심 역량</h3>
+            <ul class="list">
+                <li><strong>문제 분해</strong> — 복잡한 문제를 AI가 처리 가능한 단위로</li>
+                <li><strong>실패 패턴 인식</strong> — 할루시네이션, 컨텍스트 한계 예측</li>
+                <li><strong>도메인 지식</strong> — AI 출력의 적절성을 즉시 판단</li>
+                <li><strong class="em">파이프라인 설계</strong> — 반복 가능한 워크플로우 구축</li>
+            </ul>
+        </div>
+
+        <div class="slide surface">
+            <div class="tool-cards">
+                <div class="tool-card recommended">
+                    <p class="name" style="color: #10B981;">Claude Code</p>
+                    <p class="desc">Anthropic 공식 CLI<br>터미널 기반 Agent</p>
+                    <span class="tag-item green">최강 코딩</span>
+                    <span class="tag-item">Opus 4.5</span>
+                </div>
+                <div class="tool-card">
+                    <p class="name">Cursor</p>
+                    <p class="desc">VS Code 포크<br>가장 대중적인 선택</p>
+                    <span class="tag-item blue">안정적</span>
+                </div>
+                <div class="tool-card hot">
+                    <p class="name" style="color: #F59E0B;">Antigravity</p>
+                    <p class="desc">Google의 신무기<br>Gemini 3 Pro 기반</p>
+                    <span class="tag-item yellow">무료 (현재)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 2-1: Context Engineering ==================== -->
+
+        <div class="slide blue" data-part="Day 2-1 · Context Engineering">
+            <p class="part-divider">Part 2-1 · Context Engineering</p>
+            <h1>Context<br>Engineering</h1>
+            <p class="sub">AI에게 완벽한 맥락을 제공하는 법</p>
+        </div>
+
+        <div class="slide surface">
+            <img src="day2-context-cover.png" alt="Context Engineering"
+                style="max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <p class="sub">AI에게 완벽한 맥락을 제공하는 컨텍스트 엔지니어링</p>
+        </div>
+
+        <div class="slide">
+            <h3>Context의 출처</h3>
+            <img src="context-sources.png" alt="Context Sources" style="max-width: 450px; margin-bottom: 32px;">
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">CLAUDE.md</p>
+                    <p class="desc">프로젝트 레벨</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">대화 히스토리</p>
+                    <p class="desc">세션 레벨</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">파일 참조</p>
+                    <p class="desc">요청 레벨</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">MCP</p>
+                    <p class="desc">외부 도구</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide mint">
+            <h1>CLAUDE.md</h1>
+            <p class="sub">프로젝트의 <span class="em">맥락</span>을 알려주는 파일<br><br>이것 하나로 AI 출력 품질이 완전히 달라짐</p>
+        </div>
+
+        <div class="slide surface">
+            <h3>CLAUDE.md 필수 섹션</h3>
+            <ul class="list">
+                <li><strong>프로젝트 개요</strong> — 이 프로젝트가 뭔지</li>
+                <li><strong>코딩 컨벤션</strong> — 따라야 할 스타일 가이드</li>
+                <li><strong>빌드 & 테스트</strong> — 빌드/테스트 명령어</li>
+                <li><strong class="red">절대 금지</strong> — 하면 안 되는 것들</li>
+                <li><strong class="green">필수 사항</strong> — 반드시 해야 하는 것들</li>
+            </ul>
+        </div>
+
+        <div class="slide mint">
+            <h1>Rule-Growing<br>Development</h1>
+            <p class="sub">코드와 룰이 함께 자라난다</p>
+        </div>
+
+        <div class="slide surface">
+            <h2>Rule-Growing이란</h2>
+            <img src="rule-growing.png" alt="Rule Growing" style="max-width: 450px; margin-bottom: 32px;">
+            <div class="pipeline">
+                <div class="pipeline-step">AI한테 시키기</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">이상한 짓 관찰</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">룰 추가</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">반복</div>
+            </div>
+            <p class="sub">CLAUDE.md가 점점 정교해집니다</p>
+        </div>
+
+        <!-- ==================== DAY 2-2: 파이프라인 & TDD ==================== -->
+
+        <div class="slide violet" data-part="Day 2-2 · 파이프라인 & TDD">
+            <p class="part-divider">Part 2-2 · 파이프라인 & TDD</p>
+            <h1>파이프라인<br>설계</h1>
+            <p class="sub">반복 가능한 워크플로우 구축</p>
+        </div>
+
+        <div class="slide surface">
+            <img src="day2-pipeline-cover.png" alt="AI Pipeline & TDD"
+                style="max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <p class="sub">자동화된 검증과 피드백 루프: AI 파이프라인</p>
+        </div>
+
+        <div class="slide">
+            <h2>Multi-Agent 패턴</h2>
+            <img src="multi-agent-pattern.png" alt="Multi Agent Pattern" style="max-width: 500px; margin-bottom: 32px;">
+            <div class="grid">
+                <div class="grid-item">
+                    <p class="name em">분석가</p>
+                    <p class="desc">요구사항 추출</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">설계자</p>
+                    <p class="desc">아키텍처 설계</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name">개발자</p>
+                    <p class="desc">코드 구현</p>
+                </div>
+                <div class="grid-item">
+                    <p class="name red">검증자</p>
+                    <p class="desc">품질 검사</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide surface">
+            <h2>루프백 워크플로우</h2>
+            <img src="loopback-workflow.png" alt="Loopback Workflow" style="max-width: 450px; margin-bottom: 32px;">
+            <p class="sub">실패하면 앞으로 돌아가기</p>
+        </div>
+
+        <div class="slide orange">
+            <h1>TDD 실습</h1>
+            <p class="sub">AI와 함께하는 테스트 주도 개발</p>
+        </div>
+
+        <div class="slide surface">
+            <h3>TDD 사이클: Red-Green-Refactor</h3>
+            <div class="pipeline">
+                <div class="pipeline-step" style="background: #7F1D1D; border-color: #F87171;">Red<br><small>테스트
+                        실패</small></div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step" style="background: #064E3B; border-color: #10B981;">Green<br><small>테스트
+                        통과</small></div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step" style="background: #1E3A5F; border-color: #4A8CFF;">Refactor<br><small>코드
+                        개선</small></div>
+            </div>
+            <p class="sub">이 사이클을 AI와 함께 반복</p>
+        </div>
+
+        <!-- ==================== DAY 3-1: Agentic Workflow & Skills ==================== -->
+
+        <div class="slide blue" data-part="Day 3-1 · Agentic Workflow">
+            <p class="part-divider">Part 3-1 · Agentic Workflow</p>
+            <h1>Agentic<br>Workflow</h1>
+            <p class="sub">AI를 자율적 협업자로 활용</p>
+        </div>
+
+        <div class="slide surface">
+            <img src="day3-agentic-cover.png" alt="Agentic Workflow & Skills"
+                style="max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <p class="sub">자율적인 AI 에이전트 팀과 나만의 워크플로우 팩토리</p>
+        </div>
+
+        <div class="slide surface">
+            <h3>개인화 철학</h3>
+            <img src="personalization.png" alt="Personalization Philosophy"
+                style="max-width: 500px; margin-bottom: 32px;">
+            <ul class="list">
+                <li><strong class="red">남의 워크플로우 복사</strong> — 맥락이 다르면 효과 없음</li>
+                <li><strong class="yellow">패턴 학습</strong> — 다른 사람의 접근법 참고</li>
+                <li><strong class="green">자신만의 구축</strong> — 내 업무에 맞게 커스터마이징</li>
+            </ul>
+        </div>
+
+        <div class="slide mint">
+            <h1>Skills</h1>
+            <p class="sub">워크플로우를 패키지로 만들기<br><br><span class="em">/명령어</span> 하나로 복잡한 작업 실행</p>
+        </div>
+
+        <div class="slide">
+            <h3>Skill 폴더 구조</h3>
+            <img src="skill-structure.png" alt="Skill Structure" style="max-width: 450px; margin-bottom: 32px;">
+            <div class="code">~/.claude/skills/my-workflow/
+                ├── <span class="keyword">SKILL.md</span> # 스킬 정의 (필수)
+                ├── templates/ # 템플릿 파일들
+                ├── prompts/ # 프롬프트 모음
+                └── examples/ # 예시 파일들</div>
+        </div>
+
+        <!-- ==================== DAY 3-2: MCP & 나만의 워크플로우 ==================== -->
+
+        <div class="slide violet" data-part="Day 3-2 · MCP & Custom Workflow">
+            <p class="part-divider">Part 3-2 · MCP & Custom Workflow</p>
+            <h1>MCP</h1>
+            <p class="sub">Model Context Protocol<br><br>AI에게 <span class="em">외부 도구</span>를 연결</p>
+        </div>
+
+        <div class="slide surface">
+            <h2>MCP란</h2>
+            <img src="mcp-ecosystem.png" alt="MCP Ecosystem" style="max-width: 450px; margin-bottom: 32px;">
+            <div class="pipeline">
+                <div class="pipeline-step">Claude</div>
+                <span class="pipeline-arrow">↔</span>
+                <div class="pipeline-step on">MCP Server</div>
+                <span class="pipeline-arrow">↔</span>
+                <div class="pipeline-step">외부 도구</div>
+            </div>
+            <p class="sub">AI가 외부 세계와 상호작용하는 표준 프로토콜</p>
+        </div>
+
+        <div class="slide surface">
+            <h2>⚠️ AI Slop 주의</h2>
+            <img src="ai-slop-2d.png" alt="AI Slop" style="max-width: 500px; margin: 36px 0;">
+            <p class="sub">AI 생성 코드를 <span class="red">검증 없이</span> 그대로 쓰는 것</p>
+        </div>
+
+        <div class="slide blue">
+            <h1><span class="em">"무엇을 만들어야<br>하는지 아는 사람"</span>이<br>이깁니다</h1>
+            <p class="sub">3일간 수고하셨습니다</p>
+            <p class="meta">김학민 · SE P/J</p>
+        </div>
+
+    </div>
+
+    <div class="page-num"><span id="current">1</span> / <span id="total">1</span></div>
+    <div class="nav">
+        <button onclick="prev()">←</button>
+        <button onclick="next()">→</button>
+    </div>
+
+    <script>
+        const slidesContainer = document.getElementById('slides');
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+        let current = 0;
+
+        document.getElementById('total').textContent = total;
+
+        function updatePartLabel() {
+            const currentSlide = slides[current];
+            const partLabel = document.getElementById('part-label');
+            const partDivider = currentSlide.querySelector('.part-divider');
+            const customPart = currentSlide.getAttribute('data-part');
+
+            if (customPart) {
+                partLabel.textContent = customPart;
+            } else if (partDivider) {
+                partLabel.textContent = partDivider.textContent;
+            }
+        }
+
+        function goTo(index) {
+            if (index < 0) index = 0;
+            if (index >= total) index = total - 1;
+            current = index;
+            slidesContainer.style.transform = `translateX(-${current * 100}vw)`;
+            document.getElementById('current').textContent = current + 1;
+            updatePartLabel();
+        }
+
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+            else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+        });
+
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
+        });
+
+        updatePartLabel();
+    </script>
+
+</body>
+
+</html>

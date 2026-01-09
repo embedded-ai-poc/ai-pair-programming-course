@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ 2026 FIFA 월드컵 대진표 & 우승 예상 🏆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .slides { display: flex; transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+        .slide {
+            min-width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* THEMES */
+        .slide.neon {
+            background: linear-gradient(135deg, #1a0030 0%, #0d0d2b 50%, #1a0030 100%);
+        }
+        .slide.neon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,0,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(0,255,255,0.1) 0%, transparent 40%);
+            animation: neonPulse 4s ease-in-out infinite;
+        }
+
+        .slide.rainbow {
+            background: linear-gradient(135deg,
+                #ff0080 0%, #ff8c00 20%, #ffff00 40%,
+                #00ff00 60%, #00ffff 80%, #8000ff 100%);
+            background-size: 400% 400%;
+            animation: rainbowShift 8s ease infinite;
+        }
+
+        .slide.cyber {
+            background: linear-gradient(180deg, #000428 0%, #004e92 100%);
+        }
+        .slide.cyber::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,255,0.03) 2px, rgba(0,255,255,0.03) 4px);
+            pointer-events: none;
+        }
+
+        .slide.party {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #4facfe 100%);
+        }
+
+        .slide.gold {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        .slide.gold::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255,215,0,0.2) 0%, transparent 70%);
+        }
+
+        .slide.dark {
+            background: #0f0f1a;
+        }
+
+        .slide.grass {
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+        }
+
+        /* ANIMATIONS */
+        @keyframes neonPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        @keyframes rainbowShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor; }
+            50% { text-shadow: 0 0 40px currentColor, 0 0 80px currentColor, 0 0 120px currentColor; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-2deg); }
+            75% { transform: translateX(5px) rotate(2deg); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(-5deg); }
+            75% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(3rem, 9vw, 7rem);
+            text-align: center;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1.neon-text {
+            color: #fff;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 80px #ff00ff;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        h1.rainbow-text {
+            background: linear-gradient(90deg, #ff0080, #ff8c00, #ffff00, #00ff00, #00ffff, #8000ff, #ff0080);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 3s linear infinite;
+        }
+
+        h1.gold-text {
+            background: linear-gradient(135deg, #f5af19 0%, #f12711 25%, #f5af19 50%, #fff 75%, #f5af19 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 4s linear infinite;
+            filter: drop-shadow(0 0 20px rgba(255,215,0,0.5));
+        }
+
+        h2 {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4.5rem);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: clamp(1.6rem, 4vw, 2.5rem);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sub {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            margin-top: 30px;
+            text-align: center;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .meta {
+            margin-top: 50px;
+            font-size: 1.1rem;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+        }
+
+        /* EMPHASIS */
+        .em { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+        .pink { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+        .yellow { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+        .green { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .orange { color: #ff8c00; text-shadow: 0 0 10px #ff8c00; }
+        .gold { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .red { color: #ff4444; text-shadow: 0 0 10px #ff4444; }
+
+        /* COMPONENTS */
+        .sparkles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .sparkles span {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .big-number {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(10rem, 30vw, 20rem);
+            opacity: 0.15;
+            position: absolute;
+            color: #ff00ff;
+            text-shadow: 0 0 100px #ff00ff;
+        }
+
+        /* Stats */
+        .mega-stat {
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .mega-stat .number {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(4rem, 18vw, 10rem);
+            background: linear-gradient(135deg, #f5af19, #f12711, #f5af19);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 2s linear infinite;
+            filter: drop-shadow(0 0 30px rgba(255,100,0,0.5));
+        }
+
+        .mega-stat .label {
+            font-size: 1.4rem;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+
+        /* Cards Grid */
+        .card-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .card {
+            padding: 30px 35px;
+            min-width: 160px;
+            text-align: center;
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00);
+            z-index: -1;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255,0,255,0.3);
+        }
+
+        .card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .card .title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        .card .desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Group Table */
+        .group-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .group-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .group-card:hover {
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px rgba(255,0,255,0.3);
+            transform: scale(1.02);
+        }
+
+        .group-card .group-name {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0,255,255,0.5);
+        }
+
+        .group-card .team {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-card .team:last-child {
+            border-bottom: none;
+        }
+
+        .group-card .team.highlight {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        /* Bracket */
+        .bracket {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .bracket-round {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .bracket-round .round-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #ff00ff;
+            margin-bottom: 10px;
+        }
+
+        .bracket-match {
+            background: linear-gradient(135deg, rgba(255,0,255,0.2), rgba(0,255,255,0.2));
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+            min-width: 150px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .bracket-match:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0,255,255,0.4);
+        }
+
+        .bracket-match.winner {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .bracket-arrow {
+            font-size: 2rem;
+            color: #ffff00;
+            text-shadow: 0 0 10px #ffff00;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        /* Fancy List */
+        .fancy-list {
+            list-style: none;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .fancy-list li {
+            font-size: 1.3rem;
+            padding: 20px 28px;
+            margin: 10px 0;
+            background: linear-gradient(90deg, rgba(255,0,255,0.2) 0%, rgba(0,255,255,0.2) 100%);
+            border-left: 5px solid #ff00ff;
+            border-radius: 0 15px 15px 0;
+            position: relative;
+            animation: slideIn 0.5s ease forwards;
+            animation-delay: calc(var(--i, 0) * 0.1s);
+            opacity: 0;
+        }
+
+        .fancy-list li:nth-child(1) { --i: 1; }
+        .fancy-list li:nth-child(2) { --i: 2; border-left-color: #00ffff; }
+        .fancy-list li:nth-child(3) { --i: 3; border-left-color: #ffff00; }
+        .fancy-list li:nth-child(4) { --i: 4; border-left-color: #00ff00; }
+        .fancy-list li:nth-child(5) { --i: 5; border-left-color: #ff8c00; }
+        .fancy-list li:nth-child(6) { --i: 6; border-left-color: #ff00ff; }
+
+        /* Versus */
+        .versus {
+            display: flex;
+            gap: 30px;
+            margin: 40px 0;
+            perspective: 1000px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .versus-item {
+            padding: 40px 50px;
+            min-width: 220px;
+            text-align: center;
+            border-radius: 20px;
+            transition: transform 0.3s;
+        }
+
+        .versus-item:hover {
+            transform: scale(1.05) rotateY(5deg);
+        }
+
+        .versus-item.team1 {
+            background: linear-gradient(135deg, #1428A0 0%, #0D1B3E 100%);
+            border: 3px solid #4A8CFF;
+            box-shadow: 0 0 30px rgba(74,140,255,0.4);
+        }
+
+        .versus-item.team2 {
+            background: linear-gradient(135deg, #8B0000 0%, #2d0000 100%);
+            border: 3px solid #ff4444;
+            box-shadow: 0 0 30px rgba(255,68,68,0.4);
+        }
+
+        .versus-item .flag {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .versus-item .team-name {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 1.8rem;
+        }
+
+        .vs-badge {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 2.5rem;
+            color: #ffff00;
+            text-shadow: 0 0 20px #ffff00;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        /* Winner Prediction */
+        .winner-card {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ffd700 100%);
+            background-size: 200% 200%;
+            animation: rainbowShift 3s ease infinite;
+            padding: 50px 80px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(255,215,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-card::before {
+            content: '🏆';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            top: -30px;
+            right: -30px;
+        }
+
+        .winner-card .trophy {
+            font-size: 5rem;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        .winner-card .prediction {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: #000;
+            margin: 20px 0;
+        }
+
+        .winner-card .reason {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Table */
+        .fancy-table {
+            margin-top: 30px;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .fancy-table th {
+            padding: 18px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+        }
+
+        .fancy-table td {
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 1rem;
+        }
+
+        .fancy-table tr:hover td {
+            background: rgba(255,0,255,0.1);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav button {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+
+        .nav button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.6);
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #00ff00);
+            background-size: 300% 100%;
+            animation: rainbowShift 3s linear infinite;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 40px 20px; }
+            .versus { flex-direction: column; }
+            .bracket { flex-direction: column; }
+            .group-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides">
+        <!-- Slide 1: Cover -->
+        <div class="slide neon">
+            <div class="sparkles">
+                <span style="top: 10%; left: 10%;">⚽</span>
+                <span style="top: 15%; left: 85%;">🏆</span>
+                <span style="top: 75%; left: 8%;">🎉</span>
+                <span style="top: 80%; left: 90%;">⭐</span>
+                <span style="top: 45%; left: 5%;">🌟</span>
+                <span style="top: 50%; left: 95%;">✨</span>
+            </div>
+            <h1 class="neon-text">⚽ 2026 FIFA 월드컵 ⚽</h1>
+            <p class="sub">🇺🇸 🇲🇽 🇨🇦 미국·멕시코·캐나다 공동 개최</p>
+            <p class="meta">2026.06.11 ~ 07.19 · 대진표 & 우승 예상</p>
+        </div>
+
+        <!-- Slide 2: Overview -->
+        <div class="slide rainbow">
+            <span class="big-number">48</span>
+            <h2>🌍 사상 최대 규모!</h2>
+            <p class="sub">역대 최초 <strong>48개국</strong> 참가<br>12개 조 × 4팀 · 총 104경기</p>
+        </div>
+
+        <!-- Slide 3: Stats -->
+        <div class="slide gold">
+            <div class="card-grid">
+                <div class="card">
+                    <div class="icon">🏟️</div>
+                    <p class="title">16개</p>
+                    <p class="desc">개최 도시</p>
+                </div>
+                <div class="card">
+                    <div class="icon">⚽</div>
+                    <p class="title">104경기</p>
+                    <p class="desc">총 경기 수</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🌎</div>
+                    <p class="title">48개국</p>
+                    <p class="desc">참가국</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📅</div>
+                    <p class="title">39일</p>
+                    <p class="desc">대회 기간</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Section - Groups -->
+        <div class="slide party">
+            <span class="big-number">🏴</span>
+            <h2>📋 조별 대진표</h2>
+            <p class="sub">주요 조 편성 하이라이트</p>
+        </div>
+
+        <!-- Slide 5: Key Groups 1 -->
+        <div class="slide cyber">
+            <h3>🔥 주목해야 할 조 편성</h3>
+            <div class="group-grid">
+                <div class="group-card">
+                    <div class="group-name">🅰️ Group A</div>
+                    <div class="team">🇲🇽 멕시코 (개최국)</div>
+                    <div class="team">🇿🇦 남아프리카공화국</div>
+                    <div class="team highlight">🇰🇷 대한민국</div>
+                    <div class="team">🏴 UEFA 플레이오프</div>
+                </div>
+                <div class="group-card">
+                    <div class="group-name">🅱️ Group B</div>
+                    <div class="team">🇨🇦 캐나다 (개최국)</div>
+                    <div class="team">🏴 UEFA 플레이오프</div>
+                    <div class="team">🇶🇦 카타르</div>
+                    <div class="team">🇨🇭 스위스</div>
+                </div>
+                <div class="group-card">
+                    <div class="group-name">🇫 Group F</div>
+                    <div class="team highlight">🇳🇱 네덜란드</div>
+                    <div class="team highlight">🇯🇵 일본</div>
+                    <div class="team">🇹🇳 튀니지</div>
+                    <div class="team">🏴 UEFA 플레이오프</div>
+                </div>
+                <div class="group-card">
+                    <div class="group-name">🇮 Group I</div>
+                    <div class="team highlight">🇫🇷 프랑스</div>
+                    <div class="team">🇸🇳 세네갈</div>
+                    <div class="team">🇳🇴 노르웨이</div>
+                    <div class="team">🏴 플레이오프</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Key Groups 2 -->
+        <div class="slide dark">
+            <h3>⚔️ 죽음의 조 후보!</h3>
+            <div class="group-grid">
+                <div class="group-card" style="border-color: #ffd700;">
+                    <div class="group-name" style="color: #ffd700;">🇰 Group K ⭐</div>
+                    <div class="team highlight">🇵🇹 포르투갈</div>
+                    <div class="team">🇺🇿 우즈베키스탄</div>
+                    <div class="team highlight">🇨🇴 콜롬비아</div>
+                    <div class="team">🏴 플레이오프</div>
+                </div>
+                <div class="group-card" style="border-color: #ff4444;">
+                    <div class="group-name" style="color: #ff4444;">🇱 Group L 🔥</div>
+                    <div class="team highlight">🏴󠁧󠁢󠁥󠁮󠁧󠁿 잉글랜드</div>
+                    <div class="team highlight">🇭🇷 크로아티아</div>
+                    <div class="team">?? 미정</div>
+                    <div class="team">?? 미정</div>
+                </div>
+            </div>
+            <p class="sub" style="margin-top: 40px;">🏴󠁧󠁢󠁥󠁮󠁧󠁿 vs 🇭🇷 <span class="yellow">2018 준결승 리매치!</span></p>
+        </div>
+
+        <!-- Slide 7: Section - Key Matches -->
+        <div class="slide rainbow">
+            <span class="big-number">VS</span>
+            <h2>🎯 빅매치 프리뷰</h2>
+            <p class="sub">놓치면 안 될 경기들</p>
+        </div>
+
+        <!-- Slide 8: England vs Croatia -->
+        <div class="slide neon">
+            <h3>🔥 2018 리벤지 매치</h3>
+            <div class="versus">
+                <div class="versus-item team1">
+                    <div class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+                    <div class="team-name">잉글랜드</div>
+                    <p style="opacity: 0.7; margin-top: 10px;">FIFA 랭킹 5위</p>
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="versus-item team2">
+                    <div class="flag">🇭🇷</div>
+                    <div class="team-name">크로아티아</div>
+                    <p style="opacity: 0.7; margin-top: 10px;">FIFA 랭킹 9위</p>
+                </div>
+            </div>
+            <p class="sub">📅 6월 17일 예정 · 조별리그 빅매치</p>
+        </div>
+
+        <!-- Slide 9: France vs Senegal -->
+        <div class="slide cyber">
+            <h3>🌍 아프리카의 도전</h3>
+            <div class="versus">
+                <div class="versus-item team1">
+                    <div class="flag">🇫🇷</div>
+                    <div class="team-name">프랑스</div>
+                    <p style="opacity: 0.7; margin-top: 10px;">2018 우승 · 2022 준우승</p>
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="versus-item team2">
+                    <div class="flag">🇸🇳</div>
+                    <div class="team-name">세네갈</div>
+                    <p style="opacity: 0.7; margin-top: 10px;">아프리카 챔피언</p>
+                </div>
+            </div>
+            <p class="sub">🦁 사디오 마네 vs 음바페 대결!</p>
+        </div>
+
+        <!-- Slide 10: Section - Contenders -->
+        <div class="slide party">
+            <span class="big-number">🏆</span>
+            <h2>👑 우승 후보</h2>
+            <p class="sub">2026 챔피언을 노리는 강팀들</p>
+        </div>
+
+        <!-- Slide 11: Top Contenders -->
+        <div class="slide dark">
+            <h3>🌟 우승 후보 TOP 6</h3>
+            <ul class="fancy-list">
+                <li>🇦🇷 <strong class="gold">아르헨티나</strong> — 디펜딩 챔피언! 메시의 마지막 월드컵?</li>
+                <li>🇫🇷 <strong class="em">프랑스</strong> — 2연속 결승 진출, 음바페 전성기</li>
+                <li>🇪🇸 <strong class="pink">스페인</strong> — 유로 2024 우승! FIFA 랭킹 1위</li>
+                <li>🏴󠁧󠁢󠁥󠁮󠁧󠁿 <strong>잉글랜드</strong> — 60년의 한, 이번엔 터질까?</li>
+                <li>🇧🇷 <strong class="yellow">브라질</strong> — 셀레상의 부활, 5관왕 도전</li>
+                <li>🇵🇹 <strong class="orange">포르투갈</strong> — 호날두의 마지막 도전</li>
+            </ul>
+        </div>
+
+        <!-- Slide 12: Dream Match -->
+        <div class="slide gold">
+            <h3>⚡ 드림 매치 가능성?!</h3>
+            <div class="versus">
+                <div class="versus-item team1">
+                    <div class="flag">🇦🇷</div>
+                    <div class="team-name">메시</div>
+                    <p style="opacity: 0.7; margin-top: 10px;">GOAT 후보 #1</p>
+                </div>
+                <div class="vs-badge">⚔️</div>
+                <div class="versus-item team2">
+                    <div class="flag">🇵🇹</div>
+                    <div class="team-name">호날두</div>
+                    <p style="opacity: 0.7; margin-top: 10px;">GOAT 후보 #2</p>
+                </div>
+            </div>
+            <p class="sub">🔥 <span class="gold">역사상 마지막 월드컵 맞대결?!</span></p>
+        </div>
+
+        <!-- Slide 13: My Prediction Bracket -->
+        <div class="slide cyber">
+            <h3>🔮 예상 토너먼트 경로</h3>
+            <div class="bracket">
+                <div class="bracket-round">
+                    <div class="round-title">8강</div>
+                    <div class="bracket-match">🇫🇷 프랑스</div>
+                    <div class="bracket-match">🇪🇸 스페인</div>
+                </div>
+                <span class="bracket-arrow">→</span>
+                <div class="bracket-round">
+                    <div class="round-title">4강</div>
+                    <div class="bracket-match">🇫🇷 프랑스</div>
+                </div>
+                <span class="bracket-arrow">→</span>
+                <div class="bracket-round">
+                    <div class="round-title">결승</div>
+                    <div class="bracket-match winner">🇫🇷 vs 🇦🇷</div>
+                </div>
+                <span class="bracket-arrow">←</span>
+                <div class="bracket-round">
+                    <div class="round-title">4강</div>
+                    <div class="bracket-match">🇦🇷 아르헨티나</div>
+                </div>
+                <span class="bracket-arrow">←</span>
+                <div class="bracket-round">
+                    <div class="round-title">8강</div>
+                    <div class="bracket-match">🇦🇷 아르헨티나</div>
+                    <div class="bracket-match">🇧🇷 브라질</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Winner Prediction -->
+        <div class="slide neon">
+            <div class="sparkles">
+                <span style="top: 10%; left: 15%;">🏆</span>
+                <span style="top: 20%; left: 80%;">⭐</span>
+                <span style="top: 70%; left: 10%;">🌟</span>
+                <span style="top: 75%; left: 85%;">✨</span>
+            </div>
+            <h3>🔮 나의 우승 예상</h3>
+            <div class="winner-card">
+                <div class="trophy">🏆</div>
+                <div class="prediction">🇫🇷 프랑스</div>
+                <div class="reason">음바페의 전성기 + 풍부한 스쿼드 깊이<br>3번째 월드컵 트로피 도전!</div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Dark Horse -->
+        <div class="slide dark">
+            <h3>🐴 다크호스 주목!</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <div class="icon">🇯🇵</div>
+                    <p class="title">일본</p>
+                    <p class="desc">아시아 최강<br>유럽파 군단</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🇲🇦</div>
+                    <p class="title">모로코</p>
+                    <p class="desc">2022 4강<br>아프리카 돌풍</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🇺🇸</div>
+                    <p class="title">미국</p>
+                    <p class="desc">홈그라운드<br>차세대 스타</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🇰🇷</div>
+                    <p class="title">대한민국</p>
+                    <p class="desc">손흥민 리더십<br>2002 재현?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Korea Focus -->
+        <div class="slide grass">
+            <h3>🇰🇷 대한민국 전망</h3>
+            <div class="group-card" style="max-width: 400px; margin: 0 auto;">
+                <div class="group-name" style="font-size: 1.5rem;">🅰️ Group A</div>
+                <div class="team">🇲🇽 멕시코 (개최국)</div>
+                <div class="team">🇿🇦 남아프리카공화국</div>
+                <div class="team highlight" style="font-size: 1.2rem;">🇰🇷 대한민국 ⭐</div>
+                <div class="team">🏴 UEFA 플레이오프</div>
+            </div>
+            <p class="sub" style="margin-top: 40px;">
+                <span class="yellow">목표: 16강 이상!</span><br>
+                손흥민 + 이강인 = 역대급 라인업 🔥
+            </p>
+        </div>
+
+        <!-- Slide 17: Summary Table -->
+        <div class="slide cyber">
+            <h3>📊 최종 예상 정리</h3>
+            <table class="fancy-table">
+                <tr><th>항목</th><th>예상</th></tr>
+                <tr><td>🥇 우승</td><td><span class="em">🇫🇷 프랑스</span></td></tr>
+                <tr><td>🥈 준우승</td><td>🇦🇷 아르헨티나</td></tr>
+                <tr><td>🥉 3위</td><td>🇪🇸 스페인</td></tr>
+                <tr><td>🐴 다크호스</td><td>🇯🇵 일본</td></tr>
+                <tr><td>⚽ 득점왕</td><td>🇫🇷 음바페</td></tr>
+                <tr><td>🇰🇷 한국</td><td>16강 진출!</td></tr>
+            </table>
+        </div>
+
+        <!-- Slide 18: Closing -->
+        <div class="slide rainbow">
+            <div class="sparkles">
+                <span style="top: 15%; left: 20%;">⚽</span>
+                <span style="top: 25%; left: 75%;">🏆</span>
+                <span style="top: 65%; left: 10%;">🎉</span>
+                <span style="top: 75%; left: 90%;">🌟</span>
+            </div>
+            <h1 class="rainbow-text">🙏 감사합니다 🙏</h1>
+            <p class="sub">2026년 6월, 축구의 축제가 시작됩니다!<br><span class="yellow">⚽ Let's Go World Cup! ⚽</span></p>
+            <p class="meta">Sources: ESPN · FIFA · Bleacher Report · NBC Sports</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="prev()">←</button>
+        <button onclick="next()">→</button>
+    </div>
+    <div class="progress" id="progress"></div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+
+        function go(n) {
+            current = Math.max(0, Math.min(n, total - 1));
+            document.querySelector('.slides').style.transform = `translateX(-${current * 100}vw)`;
+            document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+        }
+
+        function next() { go(current + 1); }
+        function prev() { go(current - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') next();
+            if (e.key === 'ArrowLeft') prev();
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.fancy-list li').forEach((li, i) => {
+                        li.style.animationDelay = `${i * 0.1}s`;
+                    });
+                }
+            });
+        });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        go(0);
+    </script>
+</body>
+</html>
