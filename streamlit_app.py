@@ -295,23 +295,24 @@ def render_chat():
         for message in st.session_state.chat_session["messages"]:
             role = message["role"]
             content = message["content"]
-            
-            # 아바타 설정
-            avatar = None
+
+            # 90년대 감성 이모지 아바타
             if role == "assistant":
-                avatar = f"assets/{st.session_state.chat_session['model']}.png"
-            
+                avatar = "🤖"
+            else:
+                avatar = "👤"
+
             with st.chat_message(role, avatar=avatar):
                 st.markdown(content)
 
     # 사용자 입력
     if user_input := st.chat_input("여기에 메시지를 입력하세요... 🌟"):
         # 사용자 메시지 표시
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar="👤"):
             st.markdown(user_input)
 
         # AI 응답 생성
-        with st.chat_message("assistant", avatar=f"assets/{st.session_state.chat_session['model']}.png"):
+        with st.chat_message("assistant", avatar="🤖"):
             with st.spinner("Processing..."):
                 success, response = send_message(
                     st.session_state.client,
