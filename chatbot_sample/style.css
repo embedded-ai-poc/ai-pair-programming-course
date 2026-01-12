@@ -1,0 +1,97 @@
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-color: #0f1116;
+    --sidebar-bg: rgba(25, 27, 35, 0.8);
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #ffffff;
+    --text-secondary: #a0aec0;
+    --accent-color: #764ba2;
+}
+
+/* Global Styles */
+.main {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: 700 !important;
+}
+
+/* Sidebar Styling */
+[data-testid="stSidebar"] {
+    background-color: var(--sidebar-bg);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--glass-border);
+}
+
+/* Glassmorphism Cards */
+.stChatInput {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+}
+
+/* Chat Message Styling */
+[data-testid="stChatMessage"] {
+    background-color: transparent !important;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+[data-testid="stChatMessageContent"] {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Avatar Styling */
+[data-testid="stChatMessageAvatar"] {
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent-color);
+}
+
+/* Custom Component: Model Chip */
+.model-chip {
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--primary-gradient);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+    display: inline-block;
+}
+
+/* Button Styling */
+.stButton button {
+    background: var(--primary-gradient) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    font-weight: 600 !important;
+}
+
+.stButton button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4);
+}
+
+/* Custom Header */
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.app-logo {
+    width: 48px;
+    height: 48px;
+}
