@@ -1,0 +1,7 @@
+# AI 챗봇 필수 패키지
+# Python 3.10 이상 필요
+
+openai>=1.0.0          # OpenRouter API 호출용 (OpenAI 호환)
+python-dotenv>=1.0.0   # 환경변수(.env) 관리
+streamlit>=1.30.0      # 웹 UI 프레임워크
+requests>=2.28.0       # API 키 검증용 HTTP 클라이언트

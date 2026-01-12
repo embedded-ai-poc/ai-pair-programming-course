@@ -1,0 +1,222 @@
+/* ============================================================
+   ~*~*~ 90년대 인터넷 감성 AI 챗봇 ~*~*~
+   Best viewed with Netscape Navigator 4.0
+   Resolution: 1024x768
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+/* 기본 스타일 - Comic Sans 필수!!! */
+* {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, 'Noto Sans KR', sans-serif !important;
+}
+
+/* 메인 배경 - 별과 우주 */
+.stApp {
+    background:
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><text x="20" y="50" font-size="20">⭐</text><text x="120" y="90" font-size="15">✨</text><text x="60" y="150" font-size="18">🌟</text><text x="150" y="30" font-size="12">💫</text><text x="100" y="180" font-size="16">⭐</text></svg>') repeat,
+        linear-gradient(180deg, #000033 0%, #000066 50%, #000080 100%) !important;
+}
+
+/* ============================================================
+   깜빡이는 애니메이션들
+   ============================================================ */
+@keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+@keyframes rainbow {
+    0% { color: #FF0000; }
+    16% { color: #FF7F00; }
+    33% { color: #FFFF00; }
+    50% { color: #00FF00; }
+    66% { color: #0000FF; }
+    83% { color: #9400D3; }
+    100% { color: #FF0000; }
+}
+
+@keyframes spin3d {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    25% { transform: translateX(-5px) rotate(-3deg); }
+    75% { transform: translateX(5px) rotate(3deg); }
+}
+
+@keyframes rainbowBg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* ============================================================
+   사이드바 - 윈도우95 스타일
+   ============================================================ */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #C0C0C0 0%, #808080 100%) !important;
+    border-right: 4px outset #FFFFFF !important;
+}
+
+section[data-testid="stSidebar"] > div {
+    background: transparent !important;
+}
+
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] span {
+    color: #000000 !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stSelectbox"] > div > div {
+    background: #FFFFFF !important;
+    border: 3px inset #808080 !important;
+    color: #000000 !important;
+}
+
+section[data-testid="stSidebar"] button {
+    background: linear-gradient(180deg, #C0C0C0, #808080) !important;
+    border: 4px outset #FFFFFF !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+}
+
+section[data-testid="stSidebar"] button:active {
+    border-style: inset !important;
+}
+
+/* ============================================================
+   메인 영역
+   ============================================================ */
+.main .block-container {
+    padding: 20px !important;
+    max-width: 1200px !important;
+}
+
+h1 {
+    color: #FFFF00 !important;
+    text-shadow:
+        3px 3px 0 #FF0000,
+        6px 6px 0 #FF7F00,
+        9px 9px 0 #00FF00,
+        12px 12px 0 #0000FF,
+        15px 15px 0 #9400D3 !important;
+    animation: bounce 1s infinite !important;
+    text-align: center !important;
+}
+
+/* ============================================================
+   채팅 메시지 - 진짜 촌스럽게
+   ============================================================ */
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+    background: #FF00FF !important;
+    border: 5px dashed #00FFFF !important;
+    border-radius: 0 !important;
+    box-shadow: 5px 5px 0 #00FF00, 10px 10px 0 #FFFF00 !important;
+    margin: 20px 0 !important;
+}
+
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p {
+    color: #FFFF00 !important;
+    font-weight: bold !important;
+    text-shadow: 2px 2px 0 #000000 !important;
+}
+
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
+    background: #000080 !important;
+    border: 5px ridge #00FF00 !important;
+    border-radius: 0 !important;
+    box-shadow: 5px 5px 0 #FF00FF, 10px 10px 0 #00FFFF !important;
+    margin: 20px 0 !important;
+}
+
+[data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) p {
+    color: #00FF00 !important;
+    text-shadow: 1px 1px 0 #000000 !important;
+}
+
+[data-testid="chatAvatarIcon-user"],
+[data-testid="chatAvatarIcon-assistant"] {
+    animation: spin3d 3s linear infinite !important;
+}
+
+/* ============================================================
+   입력창 - 눈아픈 스타일
+   ============================================================ */
+[data-testid="stChatInput"] {
+    background: #000000 !important;
+    border: 4px ridge #FF00FF !important;
+}
+
+[data-testid="stChatInput"] textarea {
+    background: #000000 !important;
+    color: #00FF00 !important;
+    border: 3px inset #00FFFF !important;
+    font-size: 16px !important;
+}
+
+[data-testid="stChatInput"] button {
+    background: linear-gradient(45deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #9400D3) !important;
+    background-size: 400% 400% !important;
+    animation: rainbowBg 2s ease infinite !important;
+    border: 3px outset #FFFFFF !important;
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+    text-shadow: 2px 2px 0 #000000 !important;
+}
+
+/* ============================================================
+   에러/경고 메시지
+   ============================================================ */
+.stAlert {
+    background: #800000 !important;
+    border: 4px ridge #FF0000 !important;
+    color: #FFFF00 !important;
+}
+
+/* 구분선 - 무지개 */
+hr {
+    height: 5px !important;
+    background: linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #9400D3, #FF0000) !important;
+    border: none !important;
+}
+
+/* 커서 - 별 모양 */
+*, *::before, *::after {
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">⭐</text></svg>'), auto !important;
+}
+
+/* 스크롤바 - 윈도우95 */
+::-webkit-scrollbar {
+    width: 20px;
+    background: #C0C0C0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #FFFFFF, #808080);
+    border: 3px outset #FFFFFF;
+}
+
+/* Toast 메시지 */
+[data-testid="stToast"] {
+    background: #FFFF00 !important;
+    color: #FF0000 !important;
+    border: 3px solid #FF0000 !important;
+    font-weight: bold !important;
+}
