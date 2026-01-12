@@ -125,30 +125,36 @@ h1 {
    채팅 메시지 - 진짜 촌스럽게
    ============================================================ */
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-    background: #FF00FF !important;
-    border: 5px dashed #00FFFF !important;
+    background: #330033 !important;
+    border: 4px dashed #FF00FF !important;
     border-radius: 0 !important;
-    box-shadow: 5px 5px 0 #00FF00, 10px 10px 0 #FFFF00 !important;
+    box-shadow: 5px 5px 0 #00FFFF !important;
     margin: 20px 0 !important;
+    padding: 15px !important;
 }
 
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p {
-    color: #FFFF00 !important;
+    color: #FFFFFF !important;
     font-weight: bold !important;
-    text-shadow: 2px 2px 0 #000000 !important;
+    font-size: 16px !important;
+    text-shadow: 1px 1px 2px #000000 !important;
+    line-height: 1.6 !important;
 }
 
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) {
-    background: #000080 !important;
-    border: 5px ridge #00FF00 !important;
+    background: #001a33 !important;
+    border: 4px ridge #00FFFF !important;
     border-radius: 0 !important;
-    box-shadow: 5px 5px 0 #FF00FF, 10px 10px 0 #00FFFF !important;
+    box-shadow: 5px 5px 0 #FF00FF !important;
     margin: 20px 0 !important;
+    padding: 15px !important;
 }
 
 [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-assistant"]) p {
-    color: #00FF00 !important;
-    text-shadow: 1px 1px 0 #000000 !important;
+    color: #FFFFFF !important;
+    font-size: 16px !important;
+    text-shadow: 1px 1px 2px #000000 !important;
+    line-height: 1.6 !important;
 }
 
 [data-testid="chatAvatarIcon-user"],
@@ -165,10 +171,14 @@ h1 {
 }
 
 [data-testid="stChatInput"] textarea {
-    background: #000000 !important;
-    color: #00FF00 !important;
+    background: #1a1a2e !important;
+    color: #FFFFFF !important;
     border: 3px inset #00FFFF !important;
     font-size: 16px !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+    color: #AAAAAA !important;
 }
 
 [data-testid="stChatInput"] button {
@@ -197,10 +207,7 @@ hr {
     border: none !important;
 }
 
-/* 커서 - 별 모양 */
-*, *::before, *::after {
-    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">⭐</text></svg>'), auto !important;
-}
+/* 커서 - 기본으로 유지 */
 
 /* 스크롤바 - 윈도우95 */
 ::-webkit-scrollbar {
