@@ -103,13 +103,6 @@ NETSCAPE_BADGE = """
 </div>
 """
 
-GUESTBOOK_BANNER = """
-<div style="background: #FFFF00; border: 3px dashed #FF0000; padding: 10px; margin: 10px 0; text-align: center;">
-    <span style="color: #FF0000; font-weight: bold; font-size: 16px;">
-        📝 Sign my GUESTBOOK! 방명록에 글 남겨주세요! 📝
-    </span>
-</div>
-"""
 
 
 # ============================================================
@@ -275,7 +268,6 @@ def render_chat():
         </h1>
     """, unsafe_allow_html=True)
 
-    st.markdown(GUESTBOOK_BANNER, unsafe_allow_html=True)
 
     # API 키 오류 시
     if not st.session_state.api_key_valid:
