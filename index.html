@@ -493,6 +493,136 @@
             text-transform: uppercase;
         }
 
+        /* Google 테마 */
+        .slide.google {
+            background: linear-gradient(135deg, #1a1a2e 0%, #4285F4 100%);
+        }
+
+        .slide.google .sub {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .slide.google .em {
+            color: #8AB8FF;
+        }
+
+        /* Tool Cards */
+        .tool-cards {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 44px;
+        }
+
+        .tool-card {
+            background: #12141A;
+            border: 1px solid #353840;
+            padding: 36px 44px;
+            min-width: 300px;
+            max-width: 360px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .tool-card.recommended {
+            border-color: #34D399;
+            background: linear-gradient(180deg, #0F1015 0%, #064E3B20 100%);
+        }
+
+        .tool-card.hot {
+            border-color: #FBBF24;
+            background: linear-gradient(180deg, #0F1015 0%, #78350F20 100%);
+        }
+
+        .tool-card .name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .tool-card .desc {
+            font-size: 1.2rem;
+            color: #A0A8B8;
+            line-height: 1.7;
+            margin-bottom: 18px;
+        }
+
+        .tool-card .tag-item {
+            display: inline-block;
+            font-size: 0.95rem;
+            padding: 6px 14px;
+            background: #252830;
+            border-radius: 20px;
+            color: #B0B8C8;
+            margin: 4px;
+        }
+
+        .tool-card .tag-item.green {
+            background: #064E3B;
+            color: #7EF7C7;
+        }
+
+        .tool-card .tag-item.blue {
+            background: #1E3A5F;
+            color: #A0C8FF;
+        }
+
+        .tool-card .tag-item.yellow {
+            background: #713F12;
+            color: #FCD34D;
+        }
+
+        /* Page Number */
+        .page-num {
+            position: fixed;
+            bottom: 32px;
+            right: 48px;
+            font-size: 1.2rem;
+            color: #5A6070;
+            font-weight: 500;
+        }
+
+        /* Progress Bar */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #5A9CFF, #10B981);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Formula & Big Number */
+        .formula {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+        }
+
+        .big {
+            font-size: clamp(7rem, 22vw, 14rem);
+            font-weight: 900;
+            color: #4A8CFF;
+            line-height: 1;
+            opacity: 0.25;
+        }
+
+        /* Teal 테마 추가 */
+        .slide.teal {
+            background: #134E4A;
+        }
+
+        .slide.teal .sub {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .slide.teal .em {
+            color: #5EEAD4;
+        }
+
         @media (max-width: 768px) {
             .slide {
                 padding: 32px 28px 72px 28px;
@@ -526,13 +656,29 @@
                 padding: 14px 18px;
                 font-size: 1rem;
             }
+
+            .tool-card {
+                min-width: auto;
+                max-width: 100%;
+            }
+
+            .tool-cards {
+                flex-direction: column;
+            }
+
+            .page-num {
+                right: 24px;
+                bottom: 24px;
+            }
         }
     </style>
 </head>
 
 <body>
 
+    <div class="progress" id="progress"></div>
     <div class="part-label">AI 페어프로그래밍 워크샵</div>
+    <div class="page-num" id="pageNum">1 / 65</div>
 
     <div class="slides" id="slides">
         <!-- ==================== DAY 1: 입문 ==================== -->
@@ -858,7 +1004,7 @@
                 <tr>
                     <td><strong class="em">Claude Opus 4.5</strong></td>
                     <td>80.9%</td>
-                    <td>코딩 최강</td>
+                    <td>코딩 1위</td>
                 </tr>
                 <tr>
                     <td>GPT 5.2</td>
@@ -956,7 +1102,7 @@
                 <div class="tool-card recommended">
                     <p class="name" style="color: #10B981;">Claude Code</p>
                     <p class="desc">Anthropic 공식 CLI<br>터미널 기반 Agent</p>
-                    <span class="tag-item green">최강 코딩</span>
+                    <span class="tag-item green">코딩 1위</span>
                     <span class="tag-item">Opus 4.5</span>
                     <span class="tag-item yellow">$100/월~</span>
                 </div>
@@ -1332,7 +1478,7 @@
 
         <!-- 63. What Wins -->
         <div class="slide blue">
-            <h1><span class="em">"무엇을 만들어야<br>하는지 아는 사람"</span>이<br>이깁니다</h1>
+            <h1><span class="em">"무엇을 만들어야<br>하는지 아는 사람"</span>이<br>중요한 시대입니다</h1>
         </div>
 
         <!-- 64. Tomorrow Preview -->
@@ -3139,25 +3285,45 @@ claude
     <script>
         const slides = document.querySelectorAll('.slide');
         const total = slides.length;
+        const progress = document.getElementById('progress');
+        const pageNum = document.getElementById('pageNum');
         let current = 0;
+
+        function updateUI() {
+            // Update progress bar
+            const percent = ((current + 1) / total) * 100;
+            progress.style.width = percent + '%';
+            // Update page number
+            pageNum.textContent = `${current + 1} / ${total}`;
+        }
+
         function goTo(index) {
             if (index < 0) index = 0;
             if (index >= total) index = total - 1;
             current = index;
             document.getElementById('slides').style.transform = `translateX(-${current * 100}vw)`;
+            updateUI();
         }
+
         function next() { goTo(current + 1); }
         function prev() { goTo(current - 1); }
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
             else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+            else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+            else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
         });
+
         let touchStartX = 0;
         document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
         document.addEventListener('touchend', e => {
             const diff = touchStartX - e.changedTouches[0].clientX;
             if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
         });
+
+        // Initialize on load - start at first slide
+        goTo(0);
     </script>
 
 </body>
