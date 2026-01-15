@@ -3285,47 +3285,55 @@ claude
     </div>
 
     <script>
-        const slides = document.querySelectorAll('.slide');
-        const total = slides.length;
-        const progress = document.getElementById('progress');
-        const pageNum = document.getElementById('pageNum');
-        let current = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            const slidesContainer = document.getElementById('slides');
+            const slides = document.querySelectorAll('.slide');
+            const total = slides.length;
+            const progress = document.getElementById('progress');
+            const pageNum = document.getElementById('pageNum');
+            let current = 0;
 
-        function updateUI() {
-            // Update progress bar
-            const percent = ((current + 1) / total) * 100;
-            progress.style.width = percent + '%';
-            // Update page number
-            pageNum.textContent = `${current + 1} / ${total}`;
-        }
+            // 초기 위치 강제 설정
+            slidesContainer.style.transform = 'translateX(0)';
 
-        function goTo(index) {
-            if (index < 0) index = 0;
-            if (index >= total) index = total - 1;
-            current = index;
-            document.getElementById('slides').style.transform = `translateX(-${current * 100}vw)`;
+            function updateUI() {
+                const percent = ((current + 1) / total) * 100;
+                progress.style.width = percent + '%';
+                pageNum.textContent = `${current + 1} / ${total}`;
+            }
+
+            function goTo(index) {
+                if (index < 0) index = 0;
+                if (index >= total) index = total - 1;
+                current = index;
+                slidesContainer.style.transform = `translateX(-${current * 100}vw)`;
+                updateUI();
+            }
+
+            function next() { goTo(current + 1); }
+            function prev() { goTo(current - 1); }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+                else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+                else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+                else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+            });
+
+            let touchStartX = 0;
+            document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+            document.addEventListener('touchend', e => {
+                const diff = touchStartX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
+            });
+
+            // 전역 함수로 노출 (버튼용)
+            window.next = next;
+            window.prev = prev;
+
+            // 초기화
             updateUI();
-        }
-
-        function next() { goTo(current + 1); }
-        function prev() { goTo(current - 1); }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
-            else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
-            else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
-            else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
         });
-
-        let touchStartX = 0;
-        document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-        document.addEventListener('touchend', e => {
-            const diff = touchStartX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
-        });
-
-        // Initialize on load - start at first slide
-        goTo(0);
     </script>
 
 </body>
