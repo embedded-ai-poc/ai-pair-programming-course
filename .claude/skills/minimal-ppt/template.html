@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #0A0A0F;
+            color: #F0F0F5;
+            overflow: hidden;
+        }
+
+        .slides { display: flex; }
+
+        .slide {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5vh 6vw;
+            background: #0A0A0F;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .slide > * { flex-shrink: 0; }
+
+        /* Theme Variations */
+        .slide.light { background: #F5F6FA; color: #0A0A0F; }
+        .slide.blue { background: #0F172A; }
+        .slide.surface { background: #18181B; }
+        .slide.mint { background: #064E3B; }
+        .slide.orange { background: #7C2D12; }
+        .slide.violet { background: #4C1D95; }
+        .slide.rose { background: #881337; }
+        .slide.cyan { background: #164E63; }
+        .slide.indigo { background: #312E81; }
+        .slide.amber { background: #78350F; }
+
+        /* Theme-specific subtitle colors */
+        .slide.mint .sub, .slide.orange .sub, .slide.violet .sub,
+        .slide.blue .sub, .slide.rose .sub, .slide.cyan .sub,
+        .slide.indigo .sub, .slide.amber .sub { color: rgba(255, 255, 255, 0.85); }
+
+        .slide.light .sub { color: #3A4558; }
+
+        /* Theme-specific emphasis colors */
+        .slide.mint .em { color: #6EE7B7; }
+        .slide.orange .em { color: #FED7AA; }
+        .slide.violet .em { color: #C4B5FD; }
+        .slide.blue .em { color: #8AB8FF; }
+        .slide.rose .em { color: #FDA4AF; }
+        .slide.cyan .em { color: #67E8F9; }
+        .slide.indigo .em { color: #A5B4FC; }
+        .slide.amber .em { color: #FDE68A; }
+        .slide.light .em { color: #1428A0; }
+
+        /* Typography */
+        h1 {
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        h3 {
+            font-size: clamp(3.2rem, 5vw, 4.5rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3vh;
+            letter-spacing: -0.01em;
+        }
+
+        .sub {
+            font-size: clamp(2rem, 3vw, 2.8rem);
+            color: #D0D8E8;
+            margin-top: 2.5vh;
+            text-align: center;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Text emphasis */
+        .em { color: #5A9CFF; }
+        .red { color: #FF8080; }
+        .green { color: #34D399; }
+        .yellow { color: #FCD34D; }
+
+        .meta {
+            margin-top: 4vh;
+            font-size: 1.6rem;
+            color: #6A7080;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        /* Comparison Component */
+        .comp {
+            display: flex;
+            gap: 24px;
+            margin: 2.5vh 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .comp-item {
+            padding: 44px 52px;
+            text-align: center;
+            background: #18181B;
+            min-width: 220px;
+            border: 1px solid #3F3F46;
+            border-radius: 4px;
+        }
+
+        .comp-item.on { background: #1428A0; border-color: #4A8CFF; }
+        .comp-item.green-on { background: #064E3B; border-color: #10B981; }
+        .comp-item.yellow-on { background: #713F12; border-color: #F59E0B; }
+        .comp-item.red-on { background: #7F1D1D; border-color: #EF4444; }
+
+        .comp-item .tag {
+            font-size: clamp(1.2rem, 1.4vw, 1.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5vh;
+            color: #8A9098;
+        }
+
+        .comp-item.on .tag, .comp-item.green-on .tag,
+        .comp-item.yellow-on .tag, .comp-item.red-on .tag { color: #C0D0E0; }
+
+        .comp-item p {
+            font-size: clamp(1.6rem, 2vw, 2rem);
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        /* List Component */
+        .list {
+            list-style: none;
+            max-width: 85vw;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .list li {
+            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+            padding: 1.8vh 0;
+            border-bottom: 2px solid #505560;
+            color: #E0E8F0;
+            font-weight: 400;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .list li:last-child { border-bottom: none; }
+        .list strong { color: #FFFFFF; font-weight: 700; }
+        .slide.light .list li { border-color: #D0D4E0; color: #3A4558; }
+        .slide.light .list strong { color: #0A0A0F; }
+
+        /* Grid Component */
+        .grid {
+            display: flex;
+            gap: 20px;
+            margin-top: 2.5vh;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .grid-item {
+            padding: 36px 44px;
+            text-align: center;
+            background: #18181B;
+            min-width: 200px;
+            border: 1px solid #3F3F46;
+            border-radius: 4px;
+        }
+
+        .grid-item .name {
+            font-size: clamp(1.6rem, 2vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .grid-item .desc {
+            font-size: clamp(1.4rem, 1.6vw, 1.7rem);
+            color: #A0A8B8;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* Code Component */
+        .code {
+            background: #18181B;
+            border: 1px solid #3F3F46;
+            padding: 2.5vh 3vw;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: clamp(1.3rem, 1.5vw, 1.6rem);
+            line-height: 1.7;
+            max-width: 90vw;
+            width: 94%;
+            margin: 2vh 0;
+            white-space: pre-wrap;
+            color: #E0E8F0;
+            text-align: left;
+            border-radius: 4px;
+            max-height: 55vh;
+            overflow-y: auto;
+        }
+
+        .code .comment { color: #7A8090; }
+        .code .keyword { color: #D4C5FF; }
+        .code .string { color: #7EF7C7; }
+
+        /* Quote Box */
+        .quote-box {
+            background: #12141A;
+            border-left: 5px solid #5A9CFF;
+            padding: 2.5vh 3vw;
+            margin: 2vh 0;
+            max-width: 85vw;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .quote-box p {
+            font-size: clamp(1.6rem, 2vw, 2rem);
+            color: #D0D8E8;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Alert Boxes */
+        .warn {
+            background: #14161A;
+            border-left: 4px solid #FBBF24;
+            padding: 2vh 3vw;
+            margin-top: 2.5vh;
+            max-width: 85vw;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .warn p {
+            color: #FCD34D;
+            font-size: clamp(1.5rem, 1.8vw, 1.8rem);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .tip {
+            background: #14161A;
+            border-left: 4px solid #34D399;
+            padding: 2vh 3vw;
+            margin-top: 2.5vh;
+            max-width: 85vw;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .tip p {
+            color: #34D399;
+            font-size: clamp(1.5rem, 1.8vw, 1.8rem);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* Pipeline Component */
+        .pipeline {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 2.5vh 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pipeline-step {
+            background: #18181B;
+            border: 1px solid #52525B;
+            padding: 1.8vh 2vw;
+            font-size: clamp(1.3rem, 1.6vw, 1.7rem);
+            font-weight: 600;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .pipeline-step.on { background: #1428A0; border-color: #5A9CFF; }
+        .pipeline-step.green { background: #064E3B; border-color: #10B981; }
+        .pipeline-step.red { background: #7F1D1D; border-color: #EF4444; }
+
+        .pipeline-arrow {
+            color: #5A6070;
+            font-size: clamp(1.4rem, 1.8vw, 1.8rem);
+        }
+
+        /* Table Component */
+        .tbl {
+            margin-top: 2.5vh;
+            border-collapse: collapse;
+        }
+
+        .tbl th, .tbl td {
+            padding: 1.5vh 2.5vw;
+            text-align: left;
+            border-bottom: 2px solid #353840;
+        }
+
+        .tbl th {
+            color: #A0A8B8;
+            font-weight: 500;
+            font-size: clamp(1.4rem, 1.6vw, 1.7rem);
+            letter-spacing: 0.05em;
+        }
+
+        .tbl td {
+            font-size: clamp(1.5rem, 1.8vw, 1.9rem);
+            color: #D0D8E8;
+        }
+
+        /* Statistics */
+        .stat { text-align: center; }
+        .stat .number {
+            font-size: clamp(5rem, 15vw, 10rem);
+            font-weight: 900;
+            color: #5A9CFF;
+            line-height: 1;
+        }
+        .stat .label {
+            font-size: clamp(1.4rem, 2vw, 1.8rem);
+            color: #A0A8B8;
+            margin-top: 2vh;
+            font-weight: 400;
+        }
+
+        .big {
+            font-size: clamp(7rem, 22vw, 14rem);
+            font-weight: 900;
+            color: #4A8CFF;
+            line-height: 1;
+            opacity: 0.25;
+        }
+
+        /* Image Placeholder */
+        .img {
+            width: 100%;
+            max-width: 680px;
+            aspect-ratio: 16/9;
+            background: #12141A;
+            border: 1px solid #252830;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            margin: 2vh 0;
+            border-radius: 8px;
+        }
+
+        .img .label {
+            font-size: 12px;
+            color: #5A6070;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 400;
+        }
+
+        .img .prompt {
+            font-size: 1rem;
+            color: #6A7080;
+            text-align: center;
+            line-height: 1.7;
+            max-width: 480px;
+            font-weight: 300;
+        }
+
+        /* Two Column Layout */
+        .two-col {
+            display: flex;
+            gap: 60px;
+            max-width: 90vw;
+            width: 100%;
+        }
+
+        .two-col .col { flex: 1; }
+        .two-col h3 { text-align: left; margin-bottom: 24px; }
+        .two-col .list li { font-size: clamp(1.5rem, 1.8vw, 1.8rem); padding: 1.2vh 0; }
+
+        /* Blockquote */
+        blockquote {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            max-width: 80vw;
+            text-align: center;
+            line-height: 1.6;
+            color: #F0F0F5;
+            font-style: italic;
+        }
+
+        cite {
+            display: block;
+            margin-top: 3vh;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.5);
+            font-style: normal;
+            letter-spacing: 0.05em;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 32px;
+            left: 48px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav button {
+            width: 56px;
+            height: 56px;
+            background: transparent;
+            border: 2px solid #353840;
+            color: #7A8090;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .nav button:hover {
+            border-color: #5A9CFF;
+            color: #5A9CFF;
+        }
+
+        .part-label {
+            position: fixed;
+            top: 32px;
+            left: 48px;
+            font-size: 1.1rem;
+            color: #5A6070;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #5A9CFF;
+            transition: width 0.3s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide { padding: 32px 28px 72px 28px; }
+            .comp { flex-direction: column; gap: 14px; }
+            .comp-item { min-width: auto; padding: 32px 28px; }
+            .grid { flex-direction: column; }
+            .nav { left: 24px; bottom: 24px; }
+            .pipeline { gap: 10px; }
+            .pipeline-step { padding: 14px 18px; font-size: 1rem; }
+            .two-col { flex-direction: column; gap: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="part-label">Presentation</div>
+
+    <div class="slides" id="slides">
+
+        <!-- 01. Cover -->
+        <div class="slide blue">
+            <h1>Presentation<br>Title</h1>
+            <p class="sub">Subtitle or one-line description</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">Presenter · Department · 2025.1</p>
+        </div>
+
+        <!-- 02. Section Divider -->
+        <div class="slide violet">
+            <h1>Section<br>Title</h1>
+            <p class="sub">Section description with <span class="em">emphasis</span></p>
+        </div>
+
+        <!-- 03. List -->
+        <div class="slide surface">
+            <h2>Key Points</h2>
+            <ul class="list">
+                <li><strong>Point 1</strong> — Description here</li>
+                <li><strong class="em">Highlighted Point</strong> — Important item</li>
+                <li><strong>Point 3</strong> — Another description</li>
+            </ul>
+        </div>
+
+        <!-- 04. Comparison -->
+        <div class="slide">
+            <h3>Before vs After</h3>
+            <div class="comp">
+                <div class="comp-item red-on">
+                    <p class="tag">Before</p>
+                    <p>Previous state<br>or problem</p>
+                </div>
+                <div class="comp-item on">
+                    <p class="tag">After</p>
+                    <p>Current state<br>or solution</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 05. Grid -->
+        <div class="slide mint">
+            <h3>Features Overview</h3>
+            <div class="grid">
+                <div class="grid-item" style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.2);">
+                    <p class="name em">Feature 1</p>
+                    <p class="desc" style="color: rgba(255,255,255,0.7);">Brief description</p>
+                </div>
+                <div class="grid-item" style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.2);">
+                    <p class="name">Feature 2</p>
+                    <p class="desc" style="color: rgba(255,255,255,0.7);">Brief description</p>
+                </div>
+                <div class="grid-item" style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.2);">
+                    <p class="name">Feature 3</p>
+                    <p class="desc" style="color: rgba(255,255,255,0.7);">Brief description</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 06. Pipeline -->
+        <div class="slide surface">
+            <h3>Process Flow</h3>
+            <div class="pipeline">
+                <div class="pipeline-step">Step 1</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step on">Step 2</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step">Step 3</div>
+                <span class="pipeline-arrow">→</span>
+                <div class="pipeline-step green">Done</div>
+            </div>
+            <p class="sub">Process description here</p>
+        </div>
+
+        <!-- 07. Code -->
+        <div class="slide surface">
+            <h3>Code Example</h3>
+            <div class="code"><span class="comment">// Configuration example</span>
+<span class="keyword">const</span> config = {
+    theme: <span class="string">"dark"</span>,
+    language: <span class="string">"ko"</span>,
+    features: [<span class="string">"slides"</span>, <span class="string">"navigation"</span>]
+};</div>
+        </div>
+
+        <!-- 08. Statistics -->
+        <div class="slide">
+            <div class="stat">
+                <p class="number">85%</p>
+                <p class="label">Key metric description</p>
+            </div>
+        </div>
+
+        <!-- 09. Quote -->
+        <div class="slide">
+            <blockquote>
+                "A powerful quote that captures<br>the essence of your message."
+            </blockquote>
+            <cite>— Name, Title</cite>
+        </div>
+
+        <!-- 10. Table -->
+        <div class="slide surface">
+            <h3>Comparison Table</h3>
+            <table class="tbl">
+                <tr><th>Feature</th><th>Basic</th><th>Pro</th></tr>
+                <tr><td>Storage</td><td>10GB</td><td>100GB</td></tr>
+                <tr><td>Support</td><td>Email</td><td>24/7</td></tr>
+                <tr><td>API</td><td class="red">No</td><td class="green">Yes</td></tr>
+            </table>
+        </div>
+
+        <!-- 11. Warning & Tip -->
+        <div class="slide">
+            <h3>Notices</h3>
+            <div class="warn">
+                <p>Warning: Important caveat or caution message here.</p>
+            </div>
+            <div class="tip">
+                <p>Tip: Helpful suggestion or positive note here.</p>
+            </div>
+        </div>
+
+        <!-- 12. Closing -->
+        <div class="slide blue">
+            <h1>Thank You</h1>
+            <p class="sub">Questions?</p>
+            <p class="meta" style="color: rgba(255,255,255,0.4);">contact@example.com</p>
+        </div>
+
+    </div>
+
+    <div class="nav">
+        <button onclick="prev()">←</button>
+        <button onclick="next()">→</button>
+    </div>
+    <div class="progress" id="progress"></div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+
+        function go(n) {
+            current = Math.max(0, Math.min(n, total - 1));
+            document.querySelector('.slides').style.transform = `translateX(-${current * 100}vw)`;
+            document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+        }
+
+        function next() { go(current + 1); }
+        function prev() { go(current - 1); }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') next();
+            if (e.key === 'ArrowLeft') prev();
+        });
+
+        go(0);
+    </script>
+</body>
+</html>

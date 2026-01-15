@@ -13,22 +13,43 @@ cd ai-pair-programming-course
 
 ```
 ai-pair-programming-course/
-├── slides/                    # 워크샵 슬라이드
-├── chatbot_sample/            # AI 페어프로그래밍 실습용 샘플 프로젝트
-├── dot-claude/                # Claude Code 설정 파일 템플릿
-└── *.m4a, *.pdf              # 참고 오디오/문서 자료
+├── index.html              # 메인 워크샵 슬라이드 (브라우저로 열기)
+├── assets/                 # 슬라이드 이미지 리소스
+├── audiobooks/             # 오디오 학습 자료
+├── chatbot_sample/         # AI 챗봇 실습 프로젝트
+├── .claude/skills/         # Claude Code 스킬 템플릿
+└── AI로개발을가속하기.pdf  # 참고 문서
 ```
 
-## 슬라이드
+## 워크샵 슬라이드
 
-`slides/` 디렉토리에서 다음 파일을 브라우저로 열어보세요:
+`index.html`을 브라우저에서 열어 슬라이드를 확인하세요.
 
-- **1day.html** - 1일차 워크샵 슬라이드
-- **ai-pair-programming.html** - AI 페어프로그래밍 심화 슬라이드
+- **키보드**: ← → 또는 스페이스바로 이동
+- **터치**: 좌우 스와이프
+
+### 커리큘럼
+
+| Part | 주제 | 내용 |
+|------|------|------|
+| Day 1 | 마인드셋 | AI 페어프로그래밍 개념, Vibe Coding |
+| Day 2-1 | Context Engineering | CLAUDE.md, Rule-Growing |
+| Day 2-2 | 파이프라인 & TDD | Multi-Agent 패턴, 루프백 워크플로우 |
+| Day 3-1 | Agentic Workflow | Skills, 개인화 철학 |
+| Day 3-2 | MCP | Model Context Protocol, AI Slop 주의 |
+
+## 오디오 학습 자료
+
+`audiobooks/` 디렉토리에서 확인하세요.
+
+| 파일 | 설명 |
+|------|------|
+| AI_페어_프로그래머_활용_실전_전략.m4a | 페어프로그래밍 전략 오디오 |
+| AI-페어프로그래밍-Recap.m4a | 워크샵 요약 오디오 |
 
 ## 샘플 프로젝트
 
-`chatbot_sample/`은 AI 페어프로그래밍 실습을 위한 샘플 프로젝트입니다.
+`chatbot_sample/`은 AI 페어프로그래밍 실습을 위한 챗봇 프로젝트입니다.
 
 ### 설정 방법
 
@@ -49,33 +70,27 @@ streamlit run streamlit_app.py
 python console_app.py
 ```
 
-## Claude Code 설정
+## Claude Code 스킬
 
-`dot-claude/` 디렉토리에는 Claude Code 설정 템플릿이 포함되어 있습니다.
+`.claude/skills/` 디렉토리에는 워크샵에서 소개하는 Claude Code 스킬 템플릿이 포함되어 있습니다.
 
-### 설정 방법
+### 포함된 스킬
 
-프로젝트 루트에서 `dot-claude`를 `.claude`로 복사하세요:
+| 스킬 | 설명 |
+|------|------|
+| `agentic-workflow` | 자율적 개발 워크플로우 |
+| `debug-master` | 체계적 디버깅 워크플로우 |
+| `minimal-ppt` | HTML 프레젠테이션 생성 |
+| `skill-builder` | 새 스킬 생성 도우미 |
+
+### 사용 방법
+
+스킬을 자신의 Claude Code에 복사하세요:
 
 ```bash
 # Windows
-xcopy dot-claude .claude /E /I
+xcopy .claude\skills %USERPROFILE%\.claude\skills /E /I /Y
 
 # Mac/Linux
-cp -r dot-claude .claude
+cp -r .claude/skills ~/.claude/
 ```
-
-### 포함된 설정
-
-- **commands/** - 커스텀 슬래시 명령어
-- **skills/** - 사용자 정의 스킬
-- **plugins/** - 플러그인 설정
-- **settings.json** - Claude Code 기본 설정
-
-## 참고 자료
-
-| 파일 | 설명 |
-|------|------|
-| AI_페어_프로그래머_활용_실전_전략.m4a | 페어프로그래밍 전략 오디오 |
-| AI-페어프로그래밍-Recap.m4a | 워크샵 요약 오디오 |
-| AI로개발을가속하기.pdf | 참고 문서 |
